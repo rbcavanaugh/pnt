@@ -1,4 +1,5 @@
-shinyjs.click_sound = function() {
-  var snd = new Audio("CLICK.wav");
-  snd.play();
-}
+$(document).keyup(function(event) {
+    if (event.keyCode == 13) {
+        $("#enter").click();
+    }
+});

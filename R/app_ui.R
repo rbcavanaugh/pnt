@@ -21,6 +21,7 @@ app_ui <- function(request) {
       ),
       # allows use of shinyjs() package
       shinyjs::useShinyjs(),
+      shinyjs::extendShinyjs(text = "shinyjs.gettime = function(params) {\n     var time = Date();\n     Shiny.onInputChange(\"jstime\", time);\n   }", functions = "gettime"),
       # imports a js code snippet to get the users current time
       # sys.Time() gets the servers time, but not always the users time due
       # to timezone changes

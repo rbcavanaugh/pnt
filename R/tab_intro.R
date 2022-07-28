@@ -151,7 +151,7 @@ intro_tab_div <- function() {
                                 h5("Resume incomplete test"),
                                 p("To resume an incomplete test, upload file with in-progress
                                   data then select continue test below."),
-                                fileInput("file_incomplete", ""),
+                                fileInput("file_incomplete", label = NULL),
                                   div( align = "center",
                                     shinyjs::disabled(actionButton("resume", "Continue Test"))
                                   )
@@ -159,7 +159,7 @@ intro_tab_div <- function() {
                             ),
                             column(width = 7,
                                    class = "testinfo",
-                                   h5("Test Administration Frequently Asked Questions", style = "margin-top:0;margin-bottom:1.25rem;"),
+                                   h5("Test Administration FAQ", style = "margin-top:0;margin-bottom:1.25rem;"),
                                    accordion_faq()
                             )
                           ))
