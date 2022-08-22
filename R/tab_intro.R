@@ -37,11 +37,11 @@ intro_tab_div <- function() {
                               )
                             )
                           )),
-             # PAGE 3 ############################################################################
-             tabPanelBody(value = "new_pnt_page", #glide 1
-                          fluidRow(class = "justify-content-around",
-                            column(class="col-sm-4 col-md-4 col-lg-3",
-                              width = 3,
+             # PAGE 2 ############################################################################
+             tabPanelBody(value = "new_pnt_page", 
+                          fluidRow(#class = "justify-content-around",
+                            column(class="col-sm-3 col-md-3 col-lg-3",
+                              width = 3, offset = 1,
                                 h4("Administer PNT", align = "center"),hr(),
                                 #br(),
                               tags$b("Administration:"),
@@ -78,13 +78,13 @@ intro_tab_div <- function() {
                                   )
                                 ),
                               shinyjs::hidden(
-                                div(id="retest_div", class = "testinfo",
+                                div(id="retest_div", #class = "testinfo",
                                     fileInput("file1", "Upload previous results", accept = ".csv"),
                                     checkboxInput("exclude_previous",value = T,
                                                   "Exclude items from first administration"
                                     )
                                 )
-                              ), br(),
+                              ), 
                                 #textInput("name", "Enter a Name (optional)"),
                                 textInput("notes", "Notes (optional):"),
                                 tags$em("If continuing an incomplete test, reselect your original choices and proceed to the next page."), br(), br(),
@@ -96,11 +96,10 @@ intro_tab_div <- function() {
                              # )
                               # )
                             ),
-                            column(class="col-sm-7, col-md-8, col-lg-8",
-                                   width = 7, 
-                                   class = "testinfo",
-                                   h5("About the PNT test Versions", style = "margin-top:0;margin-bottom:1.25rem;"),
-                                   accordion_test(),br(), br(),
+                            column(#class="col-sm-6, col-md-6, col-lg-6",
+                                   width = 7, offset = 0,
+                                   class = "testinfo-fixed",
+                                   uiOutput("test_description"),br(), 
                                    includeMarkdown(system.file("app/www/esk_footnote.md", package = "pnt"))
                             )
                           )),

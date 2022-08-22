@@ -170,6 +170,11 @@ app_server <- function( input, output, session ) {
     }
   })
   
+  output$test_description <- renderUI({
+    #req(input$numitems)
+    get_test_description(selected_test = input$numitems)
+  })
+  
   observe({
     # These options are available for new_test. 
     # They are shown on the new test page. 
