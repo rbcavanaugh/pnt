@@ -29,6 +29,7 @@ app_server <- function( input, output, session ) {
   values$num_previous <- 0 # number of previous tests
   values$downloadableData = F # will the download data button appear? starts with no. yes after first response. 
   values$endTestEarly = F
+  values$widget_counter = 0
   
   ################################################################################
   ########################## Dealing with user's time ############################
@@ -95,9 +96,14 @@ app_server <- function( input, output, session ) {
   observeEvent(input$administer_test,{
     changeIntroPage("new_pnt_page")
   })
-  # go back to welcome page
-  observeEvent(input$back_test,{
-    changeIntroPage("welcome_page")
+  
+  observeEvent(input$administer_resume,{
+    changeIntroPage("resume_incomplete_page")
+  })
+  
+  observeEvent(input$back_to_test_or_retest,{
+    values$widget_counter = values$widget_counter - 1
+    changeIntroPage("new_pnt_page")
   })
 
   # If you press score offline test...
@@ -105,23 +111,76 @@ app_server <- function( input, output, session ) {
     values$new_test = FALSE
     changeIntroPage("score_offline_page")
   })
-  # go back to welcome page
-  observeEvent(input$back_offline,{
-    changeIntroPage("welcome_page")
-  })
-  # This is the next button which takes you to the 
-  # instruction page. 
-  observeEvent(input$next_test,{
-    changeIntroPage("instructions_page")
-  })
 
-  # this goes back either to the test
-  # or retest page depending on which you 
-  # initially elevted. 
-  observeEvent(input$back_to_test_or_retest,{
-      changeIntroPage("new_pnt_page")
+  
+  ##############################################################################
+  ##############################################################################
+  ################################ TEST WIDGET ################################
+  ##############################################################################
+  ##############################################################################
+  
+  hideMultiple <- function(output_names){
+    lapply(output_names, function(output_name){
+      shinyjs::hide(output_name)
+    })
+  }
+  
+  observeEvent(input$widget_next,{
+    values$widget_counter = values$widget_counter + 1
   })
   
+  observeEvent(input$widget_back,{
+    values$widget_counter = values$widget_counter - 1
+    if(values$widget_counter < 0){
+      changeIntroPage("welcome_page")
+      values$widget_counter = 0
+      }
+  })
+  
+  
+  widgets_chr = c("widget_1", "widget_retest", "widget_upload_incomplete",
+                  "widget_numitems", "widget_upload_previous", "widget_walker",
+                  "widget_eskimo", "widget_exclude_previous")
+  
+  observeEvent(values$widget_counter,{
+    if(values$widget_counter == 0){
+      
+        hideMultiple( widgets_chr)
+        shinyjs::show("widget_retest")
+        
+    } else if (values$widget_counter == 1){
+      
+        hideMultiple( widgets_chr)
+        # New test
+        if(input$retest == "1"){
+          shinyjs::show("widget_numitems")
+        # Second TEST
+        } else {
+          shinyjs::show("widget_upload_previous")
+        }
+          
+    } else if (values$widget_counter == 2){
+        
+        hideMultiple(widgets_chr)
+      
+        if(input$retest == "1"){
+          if(input$numitems=="30_walker"){
+            shinyjs::show("widget_walker")
+          } else if (input$numitems == "175_standard") {
+            shinyjs::show("widget_eskimo")
+          } else {
+            changeIntroPage("instructions_page")
+          }
+        } else if (input$retest == "2") {
+          shinyjs::show("widget_numitems")
+        }
+          
+    } else if (values$widget_counter == 3){
+      changeIntroPage("instructions_page")
+    } 
+    
+    print(values$widget_counter)
+  })
   
   ##############################################################################
   ##############################################################################
@@ -139,33 +198,30 @@ app_server <- function( input, output, session ) {
       shinyjs::hide("retest_div")
       shinyjs::reset("file1")
       shinyjs::enable("next_test")
-      updateRadioButtons(session, "numitems",
+      shinyWidgets::updateRadioGroupButtons(session, "numitems",
                          label = NULL, #"Select PNT Test Administration",
                          choices = c(
-                           "30-item Computer Adaptive" = "30_cat",
-                           "175-item Computer Adaptive" = "175_cat",
-                           #"Variable length Computer Adaptive PNT" = "SEM",
-                           "30-item Short form (Walker)" = "30_walker",
-                           "175-item Standard" = "175_standard"
+                           "30-item Adaptive Test" = "30_cat",
+                           "175-item Adaptive Test" = "175_cat",
+                           "30-item Static Test" = "30_walker",
+                           "175-item Standard Test " = "175_standard"
                          ),
-                         selected = "30_cat",
-                         inline = F)
+                         selected = "30_cat")
       
     } else {
      
       shinyjs::show("retest_div")
       shinyjs::disable("next_test")
-      updateRadioButtons(session, "numitems", 
+      shinyWidgets::updateRadioGroupButtons(session, "numitems", 
                          label = NULL, #"Select PNT Test Administration",
                          choices = c(
-                           "30-item Computer Adaptive" = "30_cat",
-                           "175-item Computer Adaptive" = "175_cat",
-                           "30-item Short form (Walker)" = "30_walker",
-                           "175-item Standard" = "175_standard",
-                           "Variable length Computer Adaptive" = "SEM"
+                           "30-item Adaptive Test" = "30_cat",
+                           "175-item Adaptive Test" = "175_cat",
+                           "30-item Static Test" = "30_walker",
+                           "175-item Standard Test " = "175_standard",
+                           "Variable-length Adaptive Test" = "SEM"
                          ),
-                         selected = "30_cat",
-                         inline = F)
+                         selected = "30_cat")
     
     }
   })
@@ -174,6 +230,7 @@ app_server <- function( input, output, session ) {
     #req(input$numitems)
     get_test_description(selected_test = input$numitems)
   })
+
   
   observe({
     # These options are available for new_test. 
@@ -802,14 +859,14 @@ app_server <- function( input, output, session ) {
       shinyjs::enable("resume")
       values$item_difficulty <- incomplete_dat
       values$item_difficulty <- values$item_difficulty[order(values$item_difficulty$item_number), , drop = FALSE]
-     # print(head(values$item_difficulty, 10))
+      #print(head(values$item_difficulty, 30))
     }
 
   })
   
   observeEvent(input$resume,{
     showModal(modalDialog(
-      h4("Click to resume the test"),
+      #h4("Click to resume the test"),
       tags$img(src = paste0("slides/Slide", 1, ".jpeg"), id = "instructions"),
       easyClose = TRUE,
       size = "l",

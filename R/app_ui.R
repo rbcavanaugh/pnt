@@ -43,7 +43,7 @@ app_ui <- function(request) {
                  ############################ Instructions ############################## 
                  
                  tabPanelBody(value = "Home",
-                              intro_tab_div()
+                              intro_tab_div2()
                  ),
                  
                  ############################ Practice ##################################
