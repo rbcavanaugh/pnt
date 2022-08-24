@@ -423,7 +423,7 @@ app_server <- function( input, output, session ) {
     values$n = NULL # reset values$n - this is the slide number (e.g. slide1 if n =1)
     values$key_val = NULL # keeps track of button press 1 (error), 2 (correct)...make sure empty
     values$exclude_previous <- ifelse(values$new_test, F, input$exclude_previous) 
-    values$notes = input$notes # holds notes
+    #values$notes = ifelse(nchar(input$notes>0), input$notes, NA) # holds notes
     values$eskimo <- input$eskimo# include eskimo?
     
     # These things need to happen for new tests
@@ -503,7 +503,6 @@ app_server <- function( input, output, session ) {
     
     # keeps track of the number of items
     values$i = 1
-    
     values$n = # slide number for first slide
       if(isTruthy(values$IRT)){ # if computer adaptive...
       # samples one of four first possible items, unless used previously...
@@ -516,6 +515,7 @@ app_server <- function( input, output, session ) {
      } else {
       14 #otherwise candle for standard PNT
      }
+    
     values$irt_out <- list(0, 0, 11) # reset saved data just in case. 
     # got to slides, reset keyval
     values$key_val = NULL # keeps track of button press 1 (error) or 2 (correct)
@@ -575,11 +575,13 @@ app_server <- function( input, output, session ) {
       # can you download data? yes - will calculate the data to go out. 
       values$downloadableData = T
       shinyjs::enable("downloadIncompleteData")
+      cat("1 \n")
       
       # require a key input response
       if(is.null(values$key_val)){ 
         showNotification("Enter a score", type = "error")
       } else { 
+        cat("2 \n")
         
         ########################################################################
         # store key press in our dataframe of items,
@@ -608,6 +610,7 @@ app_server <- function( input, output, session ) {
           ifelse(values$key_val == incorrect_key_response,"incorrect",
                  ifelse(values$key_val == correct_key_response,"correct", "NR")
           )
+        cat("3 \n")
         
         ########################################################################
         # irt_function: current data, (values$item_difficulty) w/ most recent response 
@@ -619,18 +622,20 @@ app_server <- function( input, output, session ) {
                                       exclude_eskimo = values$eskimo,
                                       walker = values$walker
         )
+        cat("4 \n")
         
         ########################################################################
         # Append output of the CAT/IRT function....ability and SEM estimates
         ########################################################################
         values$item_difficulty[values$item_difficulty$slide_num == values$n,]$ability = round(values$irt_out[[1]],4)
         values$item_difficulty[values$item_difficulty$slide_num == values$n,]$sem = round(values$irt_out[[3]],4)
-
+        cat("5 \n")
+        
         ########################################################################
         # pick the next slide using the output of the irt
         ########################################################################
         values$n = # values$n refers to the slide number of next pnt item (e.g. the image file name)
-          if(values$IRT){ # if its a computer adaptive test, use this element from the IRT out list
+          if(isTRUE(values$IRT)){ # if its a computer adaptive test, use this element from the IRT out list
             if(!is.na(values$irt_out[[2]][[1]])){ # as long as its not na
               values$item_difficulty[values$item_difficulty$target == values$irt_out[[2]]$name,]$slide_num
             } else {
@@ -640,7 +645,8 @@ app_server <- function( input, output, session ) {
             values$irt_out[[2]][[2]]
           } 
         # values$i = values$i + 1
-       
+        cat("6 \n")
+        
       ########################################################################
       # Should the test end and go to the results page? and subsequent operations
       ########################################################################
@@ -652,10 +658,15 @@ app_server <- function( input, output, session ) {
         go_to_results = values$irt_out[[3]]<values$min_sem # is the new sem  less than the min of the previos test?
       } else {
         go_to_results = values$i==values$test_length # number of slides seen (+1) exceeds the test length # was < 
+        if(values$i==values$test_length){
+          cat(paste("Values$i == values$test_length:"), values$i, values$test_length, "\n")
+        }
       }
-      
+        cat("7 \n")
+        
       # go to results if indicated
       if (isTruthy(go_to_results)){
+        cat("Go to results triggered \n")
         shinyjs::js$gettime() # log time for end of test. 
         
         # if its the end of the test, calculate the final ability/sem values
@@ -663,9 +674,14 @@ app_server <- function( input, output, session ) {
           get_final_numbers(out = values$irt_out,
                             previous = values$previous,
                             num_previous = values$num_previous)
+        
+        cat("Got final numbers \n")
         # go to the results page. 
         values$results_data_long = get_results_data_long(values)
+        cat("Got results data long \n")
         updateNavbarPage(session, "mainpage", selected = "Results")
+        
+        cat("Updated page to results \n")
         #req(input$mainpage=="Results")
         #values$current_page = input$mainpage
         # show the download buttons
@@ -874,7 +890,8 @@ app_server <- function( input, output, session ) {
     
     ### start practice stuff  ############################################
     values$key_val = NULL # keeps track of button press 1 (error), 2 (correct)
-    values$exclude_previous <- ifelse(values$new_test, F, input$exclude_previous) # only informs second tests
+    values$exclude_previous <- ifelse(values$new_test, FALSE,
+                                      ifelse(input$exclude_previous=="Yes", TRUE, FALSE)) # only informs second tests
     # only use IRT function if NOT 175 items
     #values$name = input$name
     values$notes = input$notes
@@ -907,7 +924,7 @@ app_server <- function( input, output, session ) {
                                   walker = values$walker
     )
     values$n = 
-      if(values$IRT){
+      if(isTRUE(values$IRT)){
         if(!is.na(values$irt_out[[2]][[1]])){
           values$item_difficulty[values$item_difficulty$target == values$irt_out[[2]]$name,]$slide_num
         } else {

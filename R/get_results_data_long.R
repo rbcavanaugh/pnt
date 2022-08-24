@@ -17,7 +17,6 @@ get_results_data_long <- function(values){
   } else {
     paste0(values$test_length, " items")
   }
-  
   tmp = rbind(values$item_difficulty)
   
   tmp$ci95_lower = tmp$ability - tmp$sem*1.96
@@ -26,10 +25,8 @@ get_results_data_long <- function(values){
   tmp$start = values$start_time
   tmp$end = values$end_time
   tmp$notes = NA
-  
   tmp = tmp[order(tmp$order), , drop = FALSE]
-  
-  tmp$notes[[1]] = values$notes
+  #tmp$notes[[1]] = values$notes
   return(tmp)
   
 }

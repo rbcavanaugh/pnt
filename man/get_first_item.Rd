@@ -4,7 +4,7 @@
 \alias{get_first_item}
 \title{obtains the first item for the test}
 \usage{
-get_first_item(all_items, previous, exclude_previous = F)
+get_first_item(all_items, previous, exclude_previous = FALSE)
 }
 \arguments{
 \item{all_items}{at this stage, a dataframe of all possible items}

@@ -91,7 +91,7 @@ intro_tab_div2 <- function() {
                                                shinyWidgets::radioGroupButtons(
                                                               "exclude_previous",
                                                               choices = c(
-                                                                "Yes" = TRUE, "No" = FALSE
+                                                                "Yes", "No"
                                                               ),
                                                               label = NULL,
                                                               width = "100%",

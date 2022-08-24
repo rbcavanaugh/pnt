@@ -6,11 +6,11 @@
 \usage{
 irt_function(
   all_items,
-  IRT = T,
-  exclude_previous = F,
+  IRT = TRUE,
+  exclude_previous = FALSE,
   previous,
-  exclude_eskimo = T,
-  walker = F
+  exclude_eskimo = TRUE,
+  walker = FALSE
 )
 }
 \arguments{
