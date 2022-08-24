@@ -59,7 +59,7 @@ intro_tab_div2 <- function() {
                                            
                                            div(id = "widget_numitems",
                                              fluidRow(column(width = 4, 
-                                                  div(style = "display: flex;height:95%;",
+                                                  div(style = "display: flex;height:425px;",
                                                       div(style="margin: auto auto;",
                                                     tags$h5("Select Test Version:"),
                                                     shinyWidgets::radioGroupButtons(
@@ -76,8 +76,11 @@ intro_tab_div2 <- function() {
                                                      )))
                                                   ),
                                              column(width = 8,
+                                                    div(style = "display: flex;height:425px;",
+                                                        div(style="margin: auto auto;",
                                                     uiOutput("test_description"), br(),
-                                                    includeMarkdown(system.file("app/www/esk_footnote.md", package = "pnt")), br(),
+                                                    includeMarkdown(system.file("app/www/esk_footnote.md", package = "pnt"))
+                                                        ))
                                              
                                              )
                                              )
