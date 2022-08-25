@@ -9,8 +9,16 @@ test_that("PNT-STANDARD175-initial", {
   
   #app$setInputs(welcome_next = "click")
   app$setInputs(administer_test = "click")
+  
+  app$setInputs(widget_next = "click")
+  
+  app$setInputs(widget_next = "click")
+  
   app$setInputs(numitems = "175_standard")
-  app$setInputs(next_test = "click")
+  app$setInputs(widget_next = "click")
+  
+  app$setInputs(widget_next = "click")
+  
   app$setInputs(start_practice = "click")
 
   app$executeScript("Mousetrap.trigger('enter');")

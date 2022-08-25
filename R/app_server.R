@@ -242,6 +242,8 @@ app_server <- function( input, output, session ) {
                   shinyjs::show("widget_walker")
                 } else if (input$numitems == "175_standard") {
                   shinyjs::show("widget_eskimo")
+                } else if(input$numitems == "30_cat" | input$numitems == "SEM"){
+                  shinyjs::show("widget_exclude_previous")
                 } else {
                   changeIntroPage("instructions_page")
                 }
@@ -272,11 +274,7 @@ app_server <- function( input, output, session ) {
         if(input$retest == "1"){
             
         } else if(input$retest == "2"){
-            if(input$numitems=="30_walker"){
               changeIntroPage("instructions_page")
-            } else if (input$numitems == "175_standard") {
-              changeIntroPage("instructions_page")
-            } 
         }
       }
       
@@ -347,7 +345,7 @@ app_server <- function( input, output, session ) {
       
        if(input$numitems == "175_standard"){
           # full pnt standard administration
-          values$test_length = ifelse(input$eskimo, 174, 175)
+          values$test_length = ifelse(input$eskimo=="Yes", 174, 175)
           shinyjs::show("eskimo")
           shinyjs::hide("walker")
         } else if(input$numitems == "175_cat"){
@@ -396,7 +394,7 @@ app_server <- function( input, output, session ) {
         shinyjs::hide("eskimo")
         
       } else if(input$numitems == "175_standard"){# full pnt
-        values$test_length = ifelse(input$eskimo, 174, 175)
+        values$test_length = ifelse(input$eskimo=="Yes", 174, 175)
         shinyjs::disable("exclude_previous")
         updateCheckboxInput(session, "exclude_previous", value = FALSE)
         shinyjs::hide("walker")
@@ -532,7 +530,7 @@ app_server <- function( input, output, session ) {
     values$key_val = NULL # keeps track of button press 1 (error), 2 (correct)...make sure empty
     values$exclude_previous <- ifelse(values$new_test, F, input$exclude_previous) 
     #values$notes = ifelse(nchar(input$notes>0), input$notes, NA) # holds notes
-    values$eskimo <- input$eskimo# include eskimo?
+    values$eskimo <- ifelse(input$eskimo=="Yes", TRUE, FALSE)# include eskimo?
     
     # These things need to happen for new tests
     # also saving values for the test item selections
@@ -990,13 +988,17 @@ app_server <- function( input, output, session ) {
     ))
     
     ### start practice stuff  ############################################
+    
+    #### NEED TO FIX THIS STUFF HERE TO BE BASED ON UPLOADED DOC!!!
+    
+    
     values$key_val = NULL # keeps track of button press 1 (error), 2 (correct)
     values$exclude_previous <- ifelse(values$new_test, FALSE,
                                       ifelse(input$exclude_previous=="Yes", TRUE, FALSE)) # only informs second tests
     # only use IRT function if NOT 175 items
     #values$name = input$name
     values$notes = input$notes
-    values$eskimo <- input$eskimo
+    values$eskimo <- ifelse(input$eskimo=="Yes", TRUE, FALSE)
       # IRT is poorly named - this should say CAT - aka not computer adaptive is CAT = F
       # computer adaptive if the string cat is in the num items inputs
       values$selected_test = input$numitems

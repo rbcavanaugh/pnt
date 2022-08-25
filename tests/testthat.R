@@ -1,5 +1,5 @@
 library(testthat)
-library(pnt)
+#library(pnt)
 library(shinytest)
 
 testthat::test_local()

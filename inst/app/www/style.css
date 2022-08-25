@@ -44,6 +44,15 @@ h5{
   margin: auto auto;
   padding: 3%;
   align-content: center;
+  min-width: 390px;
+  /*min-height:200px;*/
+}
+
+.fixh5{
+  min-height:42px;
+  display: flex;
+  align-items: center;
+  
 }
 
 .widget .radiobtn {

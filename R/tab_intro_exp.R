@@ -58,7 +58,7 @@ intro_tab_div2 <- function() {
                                               # )
                                               ),
                                            div(id = "widget_retest",  align = "center",
-                                                              tags$h5("Is this the first or second administration?"),
+                                                              tags$h5("Is this the first or second administration?", class = "fixh5"),
                                                                shinyWidgets::radioGroupButtons(
                                                                  inputId = "retest",
                                                                  label = NULL,
@@ -114,18 +114,18 @@ intro_tab_div2 <- function() {
                                                              )),
                                            
                                            div(id = "widget_eskimo",
-                                               tags$h5('Do you want to exclude item "Eskimo"?'),
+                                               tags$h5('Do you want to exclude item "Eskimo"?', class = "fixh5"),
                                                shinyWidgets::radioGroupButtons(
                                                  "eskimo",
                                                  choices = c(
-                                                   "Yes" = TRUE, "No" = FALSE
+                                                   "Yes", "No"
                                                  ),
                                                  label = NULL,
                                                  width = "100%",
                                                  justified = TRUE,
                                                )),
                                            div(id = "widget_walker",
-                                               tags$h5('Which short form do you want to use?'),
+                                               tags$h5('Which short form do you want to use?', class = "fixh5"),
                                                shinyWidgets::radioGroupButtons(
                                                  "walker",
                                                  choices = c(

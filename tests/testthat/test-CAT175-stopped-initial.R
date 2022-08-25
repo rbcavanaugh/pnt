@@ -7,10 +7,16 @@ test_that("PNT CAT175 stopped initial", {
   app <- ShinyDriver$new(here::here(), seed = 1)
   responses <- c(rep(c(1,2), 25))
   
- # app$setInputs(welcome_next = "click")
+  #app$setInputs(welcome_next = "click")
   app$setInputs(administer_test = "click")
+  
+  app$setInputs(widget_next = "click")
+  
+  app$setInputs(widget_next = "click")
+  
   app$setInputs(numitems = "175_cat")
-  app$setInputs(next_test = "click")
+  app$setInputs(widget_next = "click")
+  
   app$setInputs(start_practice = "click")
 
   app$executeScript("Mousetrap.trigger('enter');")
