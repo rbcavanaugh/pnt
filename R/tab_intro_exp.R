@@ -26,8 +26,8 @@ intro_tab_div2 <- function() {
                                                  ),
                                                  br(),
                                                  div(align = "center",
-                                                     actionButton("administer_test", "Administer New test"),
-                                                     actionButton("administer_resume", "Resume incomplete test"),
+                                                     actionButton("administer_test", "Administer Test"),
+                                                     #actionButton("administer_resume", "Resume incomplete test"),
                                                      actionButton("score_test", "Rescore PNT / Score offline test")),
                                                  #actionButton("welcome_next", "Get Started")),
                                                  br(), #br(),
@@ -42,19 +42,34 @@ intro_tab_div2 <- function() {
                                  column(width = 8, offset = 2,
                                  div( class = "widgetParent",
                                       div(class = "widget",
+                                          div(id = "widget_resume_question",  align = "center",
+                                              tags$h5(HTML("Would you like to start a new test <br> or resume an unfinished test?")),
+                                              shinyWidgets::radioGroupButtons(
+                                                inputId = "resume_question",
+                                                label = NULL,
+                                                width = "100%",
+                                                justified = TRUE,
+                                                choices = c("New test" = "new", "Resume test" = "resume")
+                                              )),
+                                          div(id = "widget_resume_upload", align = "center",
+                                              fileInput("file_incomplete", label = "Upload in-progress .csv file:")#,
+                                              # div(align = "center",
+                                              #     shinyjs::disabled(actionButton("resume", "Continue Test"))
+                                              # )
+                                              ),
                                            div(id = "widget_retest",  align = "center",
-                                                              tags$h5("Is this a new test or a retest?"),
+                                                              tags$h5("Is this the first or second administration?"),
                                                                shinyWidgets::radioGroupButtons(
                                                                  inputId = "retest",
                                                                  label = NULL,
                                                                  #justified = TRUE,
                                                                  width = "100%",
                                                                  justified = TRUE,
-                                                                 choices = c("Initial test" = "1", "Retest" = "2")
+                                                                 choices = c("First" = "1", "Second" = "2")
                                                                )),
                                            
                                            div(id = "widget_upload_previous", align = "center",
-                                               tags$h5("Upload the previous results"),
+                                               tags$h5("Upload the previous test results"),
                                                fileInput("file1", label = NULL, accept = ".csv")),
                                            
                                            div(id = "widget_numitems",
@@ -87,7 +102,7 @@ intro_tab_div2 <- function() {
                                            ),
                                            
                                            div(id = "widget_exclude_previous",
-                                               tags$h5("Do you want to exclude items from the first administration?"),
+                                               tags$h5(HTML("Do you want to exclude items from <br> the first administration?")),
                                                shinyWidgets::radioGroupButtons(
                                                               "exclude_previous",
                                                               choices = c(
@@ -99,7 +114,7 @@ intro_tab_div2 <- function() {
                                                              )),
                                            
                                            div(id = "widget_eskimo",
-                                               tags$h5('Do you want to exclude item "Eskimo"'),
+                                               tags$h5('Do you want to exclude item "Eskimo"?'),
                                                shinyWidgets::radioGroupButtons(
                                                  "eskimo",
                                                  choices = c(
@@ -114,7 +129,8 @@ intro_tab_div2 <- function() {
                                                shinyWidgets::radioGroupButtons(
                                                  "walker",
                                                  choices = c(
-                                                   "A", "B"
+                                                   "Form A" = "A", 
+                                                   "Form B" = "B"
                                                  ),
                                                  label = NULL,
                                                  width = "100%",
@@ -127,16 +143,16 @@ intro_tab_div2 <- function() {
                                       )
                     ))),
                     # PAGE 4 #########################################################
-                    tabPanelBody(value = "resume_incomplete_page",
-                                 fluidRow(class = "justify-content-around",
-                                   column(width = 4, align = "center",
-                                   div(class = "widget",
-                                       fileInput("file_incomplete", label = "Upload in-progress .csv file:"),
-                                       div(align = "center",
-                                           shinyjs::disabled(actionButton("resume", "Continue Test"))
-                                       ))
-                                   ))
-                    ),
+                    # tabPanelBody(value = "resume_incomplete_page",
+                    #              fluidRow(class = "justify-content-around",
+                    #                column(width = 4, align = "center",
+                    #                div(class = "widget",
+                    #                    fileInput("file_incomplete", label = "Upload in-progress .csv file:"),
+                    #                    div(align = "center",
+                    #                        shinyjs::disabled(actionButton("resume", "Continue Test"))
+                    #                    ))
+                    #                ))
+                    # ),
                     # PAGE 5 #########################################################
                     tabPanelBody(value = "score_offline_page",
                                  fluidRow(class = "justify-content-around",
@@ -171,7 +187,12 @@ intro_tab_div2 <- function() {
                                                  div(
                                                    align = "center",
                                                    actionButton("back_to_test_or_retest", "Back"),
-                                                   actionButton("start_practice","Start Practice")
+                                                   shinyjs::hidden(
+                                                      actionButton("start_practice","Start Practice")
+                                                   ),
+                                                   shinyjs::hidden(
+                                                     actionButton("resume","Resume Test")
+                                                   )
                                                  ),br()#,
                                                  # div(
                                                  #   h5("Resume incomplete test"),

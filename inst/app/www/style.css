@@ -46,9 +46,8 @@ h5{
   align-content: center;
 }
 
-#retest .btn{
+.widget .radiobtn {
   margin: 0 5px;
-  width: 120px;
 }
 
 #numitems .btn{
