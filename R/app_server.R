@@ -936,8 +936,8 @@ app_server <- function( input, output, session ) {
     ### start practice stuff  ############################################
     
     #### NEED TO FIX THIS STUFF HERE TO BE BASED ON UPLOADED DOC!!!
-    
-    
+    # Ithink this is actually ok now. A lot can be deleted since we're only
+    # resuming the 175 item test. 
     values$key_val = NULL # keeps track of button press 1 (error), 2 (correct)
     values$exclude_previous <- ifelse(values$new_test, FALSE,
                                       ifelse(input$exclude_previous=="Yes", TRUE, FALSE)) # only informs second tests
@@ -945,19 +945,10 @@ app_server <- function( input, output, session ) {
     #values$name = input$name
     values$notes = input$notes
     values$eskimo <- ifelse(input$eskimo=="Yes", TRUE, FALSE)
-      # IRT is poorly named - this should say CAT - aka not computer adaptive is CAT = F
-      # computer adaptive if the string cat is in the num items inputs
       values$selected_test = input$numitems
-      values$IRT = ifelse(grepl( "cat", input$numitems), TRUE, FALSE)
-      # walker is true if the string walker is in the num items inputs
-      values$walker = ifelse(grepl("walker", input$numitems), TRUE, FALSE)
-      values$exclude_previous = F
-      values$walker_form = input$walker
-      if(isTruthy(values$walker)){
-        values$item_difficulty = values$item_difficulty[values$item_difficulty$walker == input$walker,]
-        
-      }
-
+      values$IRT = FALSE
+      values$walker = FALSE
+      values$exclude_previous = FALSE
 
     shinyjs::show("start_over")
 
