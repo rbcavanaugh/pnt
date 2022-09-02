@@ -42,7 +42,8 @@ get_test_description <- function(selected_test){
              a theoretically valid score estimate and standard error, this is not recommended because 
              we have not collected evidence regarding the validity of short form score estimates
              obtained in this way."),
-      tags$em("Average administration time: 20-40 minutes.")
+      tags$em("Average administration time: 20-40 minutes."), br(), br(),
+      tags$b("Select next for the option to resume an incomplete test")
     )
   } else if(selected_test == "SEM"){
     div_out = div(
@@ -87,7 +88,7 @@ accordion_faq <- function(){
       ),
       bs_accordion_item(
         title = "What if I need to take a break? / Can I resume an incomplete test?",
-        tags$p("For the Standard PNT, examinees are often allowed a break between items #88 (tractor”) and #89 (queen) if necessary. If running the app locally, the app can be left running. However, if you are using the web/browser-based version of the app, it will time-out after 10 minutes of non-use. Therefore, for the free online version, it is best to end the test and download data. When you are ready to continue, you can upload the downloaded file (unmodified!) on this page to continue the test. Make sure to make the same test administration selections. See https://aphasia-apps.github.io/pnt/articles/articles/pnt.html for instructions on running the app locally. In general, we recommend this option for administrations of the 175-item PNT and for reserach studies."),
+        tags$p("For the Standard 175-item PNT, examinees are often allowed a break between items #88 (tractor”) and #89 (queen) if necessary. If running the app locally, the app can be left running. However, if you are using the web/browser-based version of the app, it will time-out after 10 minutes of non-use. Therefore, for the free online version, it is best to end the test and download data. When you are ready to continue, you can upload the downloaded file (unmodified!) on this page to continue the test. Make sure to make the same test administration selections. This option is only available for the 175-item standard test. See https://aphasia-apps.github.io/pnt/articles/articles/pnt.html for instructions on running the app locally. In general, we recommend this option for administrations of the 175-item PNT and for reserach studies."),
       ),
       bs_accordion_item(
         title = "Should I audio record the test?",

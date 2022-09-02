@@ -65,7 +65,8 @@ app_server <- function( input, output, session ) {
     if(nrow(values$previous)>1){
         values$num_previous <- 1
         values$min_sem <- min(values$previous$sem, na.rm = T)
-        shinyjs::enable("next_test")
+        shinyjs::enable("widget_next")
+        #shinyjs::enable("next_test")
       # triggered if uploadedData function returns an error
       # resets the upload function. 
     } else {
@@ -132,12 +133,19 @@ app_server <- function( input, output, session ) {
     })
   }
   
+  resetMultiple <- function(output_names){
+    lapply(output_names, function(output_name){
+      shinyjs::reset(output_name)
+    })
+  }
+  
   observeEvent(input$widget_next,{
     values$widget_counter = values$widget_counter + 1
   })
   
   observeEvent(input$widget_back,{
     values$widget_counter = values$widget_counter - 1
+    shinyjs::enable("widget_next")
     if(values$widget_counter < 0){
       changeIntroPage("welcome_page")
       values$widget_counter = 0
@@ -153,138 +161,118 @@ app_server <- function( input, output, session ) {
   observeEvent(values$widget_counter,{
     hideMultiple(widgets_chr)
     enableMultiple(widgets_chr)
+    
     #### PAGE 1
     if(values$widget_counter == 0){
-      shinyjs::show("widget_resume_question")
+      resetMultiple(widgets_chr)
+      shinyjs::show("widget_retest")
+      shinyjs::show("start_practice")
+      shinyjs::hide("resume")
       values$widget
     }
     
     #### Page 2
     if(values$widget_counter == 1){
       shinyjs::show("start_over")
-        if(input$resume_question=="resume"){
-          shinyjs::show("widget_resume_upload")
-          shinyjs::show("resume")
-          shinyjs::hide("start_practice")
-        } else if (input$resume_question=="new") {
-          shinyjs::show("widget_retest")
-          shinyjs::show("start_practice")
-          shinyjs::hide("resume")
+        if(input$retest == "1"){
+          shinyjs::show("widget_numitems")
+        } else if(input$retest == "2"){
+          shinyjs::disable("widget_next")
+          shinyjs::show("widget_upload_previous")
         }
     }
     
     #### PAGE 3
     if (values$widget_counter == 2){
-        if(input$resume_question == "resume"){
-          shinyjs::show("widget_retest")
-        } else if (input$resume_question=="new") {
-              if(input$retest == "1"){
-                shinyjs::show("widget_numitems")
-              } else if(input$retest == "2"){
-                shinyjs::show("widget_upload_previous")
-              }
+        if(input$retest == "1"){
+          if(input$numitems=="30_walker"){
+            shinyjs::show("widget_walker")
+          } else if (input$numitems == "175_standard") {
+            shinyjs::show("widget_resume_question")
+            
+          } else {
+            changeIntroPage("instructions_page")
+          }
+        } else if(input$retest == "2"){
+          shinyjs::show("widget_numitems")
         }
+      
     }
     
     if (values$widget_counter == 3){
       
-        if(input$resume_question == "resume"){
-            if(input$retest == "1"){
-              shinyjs::show("widget_numitems")
-            } else if(input$retest == "2"){
-              shinyjs::show("widget_upload_previous")
-            }
-        } else if(input$resume_question == "new") {
-              if(input$retest == "1"){
-                  if(input$numitems=="30_walker"){
-                    shinyjs::show("widget_walker")
-                  } else if (input$numitems == "175_standard") {
-                    shinyjs::show("widget_eskimo")
-                  } else {
-                    changeIntroPage("instructions_page")
-                  }
-              } else if(input$retest == "2"){
-                shinyjs::show("widget_numitems")
-              }
+
+      if(input$retest == "1"){
+        if(input$numitems=="30_walker"){
+          changeIntroPage("instructions_page")
+        } else if(input$resume_question=="resume" & input$numitems == "175_standard"){
+          shinyjs::disable("widget_next")
+          shinyjs::show("widget_resume_upload")
+          shinyjs::show("resume")
+          shinyjs::hide("start_practice")
+        } else if (input$numitems == "175_standard"){
+          shinyjs::show("widget_eskimo")
+        } else {
+          changeIntroPage("instructions_page")
         }
+        
+      } else if(input$retest == "2"){
+        if(input$numitems=="30_walker"){
+          shinyjs::show("widget_walker")
+        } else if (input$numitems == "175_standard") {
+          shinyjs::show("widget_resume_question")
+        } else if(input$numitems == "30_cat" | input$numitems == "SEM"){
+          shinyjs::show("widget_exclude_previous")
+        } else {
+          changeIntroPage("instructions_page")
+        }
+      }
+      
       
     }
     
     if(values$widget_counter == 4){
       
-          if(input$resume_question == "resume"){
-            if(input$retest == "1"){
-                if(input$numitems=="30_walker"){
-                  shinyjs::show("widget_walker")
-                } else if (input$numitems == "175_standard") {
-                  shinyjs::show("widget_eskimo")
-                } else {
-                  changeIntroPage("instructions_page")
-                }
-            } else if(input$retest == "2"){
-                if(input$numitems=="30_walker"){
-                  shinyjs::show("widget_walker")
-                } else if (input$numitems == "175_standard") {
-                  shinyjs::show("widget_eskimo")
-                } else {
-                  changeIntroPage("instructions_page")
-                }
-            }
-          } else if(input$resume_question == "new") {
-            if(input$retest == "1"){
-                if(input$numitems=="30_walker"){
-                  changeIntroPage("instructions_page")
-                } else if (input$numitems == "175_standard") {
-                  changeIntroPage("instructions_page")
-                } 
-            } else if(input$retest == "2"){
-                if(input$numitems=="30_walker"){
-                  shinyjs::show("widget_walker")
-                } else if (input$numitems == "175_standard") {
-                  shinyjs::show("widget_eskimo")
-                } else if(input$numitems == "30_cat" | input$numitems == "SEM"){
-                  shinyjs::show("widget_exclude_previous")
-                } else {
-                  changeIntroPage("instructions_page")
-                }
-            }
-          }
+      if(input$retest == "1"){
+        if(input$resume_question=="resume" & input$numitems == "175_standard"){
+          shinyjs::show("widget_eskimo")
+        } else {
+          changeIntroPage("instructions_page")
+        }
+      } else if(input$retest == "2"){
+        if(input$numitems=="30_walker"){
+          changeIntroPage("instructions_page")
+        } else if(input$resume_question=="resume" & input$numitems == "175_standard"){
+          shinyjs::disable("widget_next")
+          shinyjs::show("widget_resume_upload")
+          shinyjs::show("resume")
+          shinyjs::hide("start_practice")
+        } else if (input$numitems == "175_standard"){
+          shinyjs::show("widget_eskimo")
+        } else {
+          changeIntroPage("instructions_page")
+        }
+      }
       
     }
     
     if (values$widget_counter == 5){
+      if(input$retest == "1"){
+        changeIntroPage("instructions_page")
+      } else if (input$retest == "2"){
+        if(input$resume_question=="resume" & input$numitems == "175_standard"){
+          shinyjs::show("widget_eskimo")
+        } else {
+          changeIntroPage("instructions_page")
+        }
         
-      if(input$resume_question == "resume"){
-        if(input$retest == "1"){
-              if(input$numitems=="30_walker"){
-                changeIntroPage("instructions_page")
-              } else if (input$numitems == "175_standard") {
-                changeIntroPage("instructions_page")
-              } else {
-                changeIntroPage("instructions_page")
-              }
-        } else if(input$retest == "2"){
-            if(input$numitems=="30_walker"){
-              changeIntroPage("instructions_page")
-            } else if (input$numitems == "175_standard") {
-              changeIntroPage("instructions_page")
-            } 
-        }
-      } else if(input$resume_question == "new") {
-        if(input$retest == "1"){
-            
-        } else if(input$retest == "2"){
-              changeIntroPage("instructions_page")
-        }
       }
-      
-          
-    }
+    } 
     
     if (values$widget_counter == 6){
       changeIntroPage("instructions_page")
-    } 
-    
+    }
+
     print(values$widget_counter)
   })
   
@@ -341,76 +329,24 @@ app_server <- function( input, output, session ) {
   observe({
     # These options are available for new_test. 
     # They are shown on the new test page. 
-    if(isTruthy(values$new_test)){
       
        if(input$numitems == "175_standard"){
           # full pnt standard administration
           values$test_length = ifelse(input$eskimo=="Yes", 174, 175)
-          shinyjs::show("eskimo")
-          shinyjs::hide("walker")
         } else if(input$numitems == "175_cat"){
           # full pnt cat administration
           values$test_length = 174
-          shinyjs::hide("eskimo")
-          shinyjs::hide("walker")
         } else if(input$numitems == "30_cat"){
           # fixed length IRT
           values$test_length = 30
-          shinyjs::hide("eskimo")
-          shinyjs::hide("walker")
+        } else if (input$numitems == "SEM"){
+          values$test_length = "SEM"
         } else { # this is the walker condition
           values$test_length = 30
-          shinyjs::show("walker")
-          shinyjs::hide("eskimo")
         }
-    } else { # These options are for the rettest page. 
-      
-      # if the second test is a variable length. 
-      if(input$numitems == "SEM"){
-        # set values. 
-        values$test_length <- "SEM"
-        # by default the exclude previous option is set to TRUE
-        shinyjs::disable("exclude_previous")
-        updateCheckboxInput(session, "exclude_previous", value = TRUE)
-        # hide these options
-        shinyjs::hide("walker")
-        shinyjs::hide("eskimo")
-        
-      } else if(input$numitems == "30_cat"){
-        
-        # fixed length IRT of length 30
-        values$test_length = 30
-        shinyjs::enable("exclude_previous") # option is available to exclude previous. 
-        updateCheckboxInput(session, "exclude_previous", value = TRUE)
-        shinyjs::hide("walker")
-        shinyjs::hide("eskimo")
-        
-      } else if(input$numitems == "175_cat"){
-        
-        values$test_length = 174
-        shinyjs::disable("exclude_previous")
-        updateCheckboxInput(session, "exclude_previous", value = FALSE)
-        shinyjs::hide("walker")
-        shinyjs::hide("eskimo")
-        
-      } else if(input$numitems == "175_standard"){# full pnt
-        values$test_length = ifelse(input$eskimo=="Yes", 174, 175)
-        shinyjs::disable("exclude_previous")
-        updateCheckboxInput(session, "exclude_previous", value = FALSE)
-        shinyjs::hide("walker")
-        shinyjs::show("eskimo")
-        
-      } else { #Final condition is for the walker test. No need to exclude previous
-        
-        values$test_length = 30
-        shinyjs::disable("exclude_previous")
-        updateCheckboxInput(session, "exclude_previous", value = FALSE)
-        shinyjs::show("walker")
-        shinyjs::hide("eskimo")
-        
-      }
-    }
-  })
+    cat(paste("New test length:", values$test_length, "\n"))
+    })
+
   
   ##############################################################################
   ##############################################################################
@@ -954,7 +890,8 @@ app_server <- function( input, output, session ) {
     file <- input$file_incomplete
 
     incomplete_dat <- read.csv(file$datapath)
-    current_test = input$numitems
+    test = unique(incomplete_dat$test)
+    
     
     if (!all(c("key", "sem", "ability", "order", "test", "resp", "response",
               "item_number", "itemDifficulty", "discrimination") %in% colnames(incomplete_dat))) {
@@ -964,8 +901,16 @@ app_server <- function( input, output, session ) {
       values$item_difficulty <- items
       shinyjs::reset("file_incomplete")
 
-    } else {
+    } else if (!grepl("175_standard", x = test)) {
       
+      showNotification("Error: Resume test is only available for the standard 175-item PNT", type = "error")
+      incomplete_dat <- NULL
+      values$item_difficulty <- items
+      shinyjs::reset("file_incomplete")
+      
+    } else {
+      shinyjs::enable("widget_next")
+      values$start_time = unique(incomplete_dat$start)
       values$item_difficulty <- incomplete_dat
       values$item_difficulty <- values$item_difficulty[order(values$item_difficulty$item_number), , drop = FALSE]
       test = unique(incomplete_dat$test)
@@ -975,6 +920,7 @@ app_server <- function( input, output, session ) {
       shinyWidgets::updateRadioGroupButtons(session = session, inputId = "walker", selected = walkerform)
       shinyjs::disable("widget_numitems")
       shinyjs::disable("widget_walker")
+      print("end")
     }
 
   })
@@ -1105,10 +1051,8 @@ app_server <- function( input, output, session ) {
       if(!isTruthy(values$score_uploaded_test)){
         values$end_time = as.character(strptime(input$jstime,
                                                 format = '%a %b %d %Y %H:%M:%S GMT%z'))
-        values$duration = as.POSIXlt(values$end_time)-as.POSIXlt(values$start_time)
-        cat("Testing ended on", values$end_time, "\n",
-            "Total testing time was", round(values$duration[[1]], 2),
-                                          units(values$duration), "\n")
+        #values$duration = as.POSIXlt(values$end_time)-as.POSIXlt(values$start_time)
+        cat("Testing ended on", values$end_time, "\n")
       }
 
       }

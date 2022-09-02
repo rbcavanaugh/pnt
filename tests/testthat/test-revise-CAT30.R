@@ -4,7 +4,7 @@ test_that("score re-uploaded test PNT-CAT30", {
   # Get app to results page # Updated for new format
   #########################################################
 
-  app <- ShinyDriver$new(here::here(), seed = 1)
+  app <- ShinyDriver$new(here::here(), seed = 1) 
   #app$setInputs(welcome_next = "click")
   app$setInputs(score_test = "click")
   app$uploadFile(file2 = here::here("tests", "testthat", "files", "test_upload_cat30.csv"))

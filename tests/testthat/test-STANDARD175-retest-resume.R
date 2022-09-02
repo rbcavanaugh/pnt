@@ -5,7 +5,13 @@ testthat::test_that("PNT-STANDARD 175-retest", {
   #########################################################
   
   app <- ShinyDriver$new(here::here(), seed = 1)
-  responses <- c(rep(c(1,2), 174/2))
+  responses <- c(rep(c(1,2), 81), 1)
+  existing_responses <- read.csv(here::here("tests", "testthat", "files",
+                                   "resume_pnt175-std_grapesLogged.csv"))$key[1:11]
+  
+ # prev = read.csv(here::here("tests", "testthat", "files", "test_upload_standard175.csv"))
+  
+  all_responses = c(existing_responses, responses)
   
   #app$setInputs(welcome_next = "click")
   app$setInputs(administer_test = "click")
@@ -19,21 +25,19 @@ testthat::test_that("PNT-STANDARD 175-retest", {
   app$setInputs(numitems = "175_standard")
   app$setInputs(widget_next = "click")
   
+  app$setInputs(resume_question = "resume")
   app$setInputs(widget_next = "click")
   
+  app$uploadFile(file_incomplete = here::here("tests", "testthat", "files",
+                                              "resume_pnt175-std_grapesLogged.csv"))
+  app$setInputs(widget_next = "click")
   
-  app$setInputs(start_practice = "click")
-
-  app$executeScript("Mousetrap.trigger('enter');")
-  app$executeScript("Mousetrap.trigger('enter');")
+  app$setInputs(widget_next = "click") # eskimo
   
-  for(i in 1:9){
-    app$executeScript("Mousetrap.trigger('1');")
-    app$executeScript("Mousetrap.trigger('enter');")
-  }
   
-  Sys.sleep(0.5)
-  app$setInputs(start = "click")
+  app$setInputs(resume = "click")
+  
+  app$findElement('button[data-dismiss="modal"]')$click()
 
   for(i in 1:length(responses)){
     if(responses[i]==1){
@@ -44,7 +48,7 @@ testthat::test_that("PNT-STANDARD 175-retest", {
     app$executeScript("Mousetrap.trigger('enter');")
   }
 
-  Sys.sleep(10)
+  Sys.sleep(5)
   val = app$getAllValues()
   
   #########################################################
@@ -55,17 +59,14 @@ testthat::test_that("PNT-STANDARD 175-retest", {
   testthat::expect_equal(val$export$current_page, "Results")
   
   # are responses tracked accurately? 
-  testthat::expect_equal(sum(val$export$results$key=='2', na.rm = T), sum(responses==2))
-  testthat::expect_equal(sum(val$export$results$key=='1', na.rm = T), sum(responses==1))
+  testthat::expect_equal(sum(val$export$results$key=='2', na.rm = T), sum(all_responses==2))
+  testthat::expect_equal(sum(val$export$results$key=='1', na.rm = T), sum(all_responses==1))
   # Are the test administration final numbers saved?
   testthat::expect_equal(sum(!is.na(val$export$irt_final)), 4)
   # Make sure 174 items were administered:
   testthat::expect_equal(
     sum(val$export$results$key=='2', na.rm = T)+sum(val$export$results$key=='1', na.rm = T),
     174)
-  print(sum(val$export$results$key=='2', na.rm = T)+sum(val$export$results$key=='1', na.rm = T))
-  # make sure SEM difference exists
-  testthat::expect_lt((val$export$irt_final$last_sem-val$export$irt_final$sem), 10)
   # can we download data and the results?
   testthat::expect_gt(length(app$snapshotDownload("download_results-results_download")), 100)
   testthat::expect_gt(length(app$snapshotDownload("download_report-report_download")), 100)

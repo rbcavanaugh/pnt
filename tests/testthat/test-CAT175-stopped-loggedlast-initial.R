@@ -12,8 +12,6 @@ test_that("PNT CAT175 stopped initial logged last response", {
   
   app$setInputs(widget_next = "click")
   
-  app$setInputs(widget_next = "click")
-  
   app$setInputs(numitems = "175_cat")
   app$setInputs(widget_next = "click")
   

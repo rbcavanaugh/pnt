@@ -9,8 +9,6 @@ test_that("PNT-CAT30-retest", {
   
   app$setInputs(administer_test = "click")
   
-  app$setInputs(widget_next = "click")
-  
   app$setInputs(retest = "2")
   app$setInputs(widget_next = "click")
   

@@ -1,4 +1,4 @@
-0,target,key,resp,response,discrimination,itemDifficulty,slide_num,order,pnt_order,ability,sem,ci95_lower,ci95_upper,test,start,end,notes
+item_number,target,key,resp,response,discrimination,itemDifficulty,slide_num,order,pnt_order,ability,sem,ci95_lower,ci95_upper,test,start,end,notes
 1,candle,2,correct,1,0.182,46.39,14,1,1,54.6482,8.3076,38.365304,70.931096,175_standard,12/8/21 14:07,12/8/21 14:08,
 2,ghost,2,correct,1,0.182,46.92,15,2,2,57.0492,7.5291,42.292164,71.806236,175_standard,12/8/21 14:07,12/8/21 14:08,NA
 3,dinosaur,2,correct,1,0.182,55.15,16,3,3,60.3551,6.9149,46.801896,73.908304,175_standard,12/8/21 14:07,12/8/21 14:08,NA

@@ -11,7 +11,6 @@ test_that("PNT-CAT30-initial", {
   
   app$setInputs(widget_next = "click")
   app$setInputs(widget_next = "click")
-  app$setInputs(widget_next = "click")
   
   app$setInputs(start_practice = "click")
 

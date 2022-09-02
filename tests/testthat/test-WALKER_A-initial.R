@@ -12,8 +12,6 @@ test_that("Walker Form A initial", {
   
   app$setInputs(widget_next = "click")
   
-  app$setInputs(widget_next = "click")
-  
   app$setInputs(numitems = "30_walker")
   app$setInputs(widget_next = "click")
   
