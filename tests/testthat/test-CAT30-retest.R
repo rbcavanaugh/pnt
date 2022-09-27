@@ -8,11 +8,14 @@ test_that("PNT-CAT30-retest", {
   responses <- c(rep(c(2,2), 15))
   
   app$setInputs(administer_test = "click")
-  app$setInputs(retest = "2")
   
+  app$setInputs(retest = "2")
+  app$setInputs(widget_next = "click")
   
   app$uploadFile(file1 = here::here("tests", "testthat", "files", "test_upload_cat30.csv"))
-  app$setInputs(next_test = "click")
+  app$setInputs(widget_next = "click")
+  
+  app$setInputs(widget_next = "click")
   
   app$setInputs(start_practice = "click")
 

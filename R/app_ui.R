@@ -36,14 +36,14 @@ app_ui <- function(request) {
       
       ################################### layout starts here ######################### 
       
-      navbarPage(title = "PNT-CAT (beta)", # App title
+      navbarPage(title = span("pnt-cat", span("v0.1.0 (beta)", style = "font-size:0.8em;color:grey;")), # App title
                  id = "mainpage", # id of page so you can access current page with input$mainpage
                  theme = minimal_theme(), # theme function from {bslib}. see theme.R
 
                  ############################ Instructions ############################## 
                  
                  tabPanelBody(value = "Home",
-                              intro_tab_div()
+                              intro_tab_div2()
                  ),
                  
                  ############################ Practice ##################################
@@ -69,7 +69,7 @@ app_ui <- function(request) {
                          bslib::nav_item(pagetitle()),
                          bslib::nav_item(
                            tags$a(icon("readme"),
-                                  href = "https://aphasia-apps.github.io/pnt",
+                                  href = "https://rbcavanaugh.github.io/pnt",
                                   target = "_blank",
                                   style = "color:black;")
                          )

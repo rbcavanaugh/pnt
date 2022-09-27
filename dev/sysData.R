@@ -1,10 +1,12 @@
 
-irt_params = list(
-  method = "EAP",
-  parInt = c(10, 90, 33),
-  priorPar = c(50,10),
-  range = c(10, 90)
-)
+# irt_params = list(
+#   method = "EAP",
+#   parInt = c(10, 90, 33),
+#   priorPar = c(50,10),
+#   range = c(10, 90)
+# )
+
+
 
 usethis::use_data(
   download_df,

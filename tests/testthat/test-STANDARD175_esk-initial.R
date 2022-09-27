@@ -7,11 +7,24 @@ test_that("PNT-STANDARD 175 eskimo initial", {
   app <- ShinyDriver$new(here::here(), seed = 1)
   responses <- c(rep(c(1,2), 174/2),1)
   
- # app$setInputs(welcome_next = "click")
+  #app$setInputs(welcome_next = "click")
   app$setInputs(administer_test = "click")
+  
+  app$setInputs(widget_next = "click")
+  
+  app$setInputs(widget_next = "click")
+  
   app$setInputs(numitems = "175_standard")
-  app$setInputs(eskimo = FALSE)
-  app$setInputs(next_test = "click")
+  app$setInputs(widget_next = "click")
+  
+  app$setInputs(widget_next = "click")
+  
+  app$setInputs(widget_next = "click") # resume?
+  
+  app$setInputs(eskimo = "No")
+  app$setInputs(widget_next = "click") # eskimo
+  
+  
   app$setInputs(start_practice = "click")
 
   app$executeScript("Mousetrap.trigger('enter');")
@@ -24,7 +37,7 @@ test_that("PNT-STANDARD 175 eskimo initial", {
   
   Sys.sleep(0.5)
   app$setInputs(start = "click")
-
+  
   for(i in 1:length(responses)){
     if(responses[i]==1){
       app$executeScript("Mousetrap.trigger('1');")

@@ -29,6 +29,8 @@ app_server <- function( input, output, session ) {
   values$num_previous <- 0 # number of previous tests
   values$downloadableData = F # will the download data button appear? starts with no. yes after first response. 
   values$endTestEarly = F
+  values$widget_counter = 0
+  values$widget_logic = list()
   
   ################################################################################
   ########################## Dealing with user's time ############################
@@ -63,7 +65,8 @@ app_server <- function( input, output, session ) {
     if(nrow(values$previous)>1){
         values$num_previous <- 1
         values$min_sem <- min(values$previous$sem, na.rm = T)
-        shinyjs::enable("next_test")
+        shinyjs::enable("widget_next")
+        #shinyjs::enable("next_test")
       # triggered if uploadedData function returns an error
       # resets the upload function. 
     } else {
@@ -95,9 +98,14 @@ app_server <- function( input, output, session ) {
   observeEvent(input$administer_test,{
     changeIntroPage("new_pnt_page")
   })
-  # go back to welcome page
-  observeEvent(input$back_test,{
-    changeIntroPage("welcome_page")
+  
+  observeEvent(input$administer_resume,{
+    changeIntroPage("resume_incomplete_page")
+  })
+  
+  observeEvent(input$back_to_test_or_retest,{
+    values$widget_counter = values$widget_counter - 1
+    changeIntroPage("new_pnt_page")
   })
 
   # If you press score offline test...
@@ -105,23 +113,168 @@ app_server <- function( input, output, session ) {
     values$new_test = FALSE
     changeIntroPage("score_offline_page")
   })
-  # go back to welcome page
-  observeEvent(input$back_offline,{
-    changeIntroPage("welcome_page")
-  })
-  # This is the next button which takes you to the 
-  # instruction page. 
-  observeEvent(input$next_test,{
-    changeIntroPage("instructions_page")
-  })
 
-  # this goes back either to the test
-  # or retest page depending on which you 
-  # initially elevted. 
-  observeEvent(input$back_to_test_or_retest,{
-      changeIntroPage("new_pnt_page")
+  
+  ##############################################################################
+  ##############################################################################
+  ################################ TEST WIDGET ################################
+  ##############################################################################
+  ##############################################################################
+  
+  hideMultiple <- function(output_names){
+    lapply(output_names, function(output_name){
+      shinyjs::hide(output_name)
+    })
+  }
+  
+  enableMultiple <- function(output_names){
+    lapply(output_names, function(output_name){
+      shinyjs::enable(output_name)
+    })
+  }
+  
+  resetMultiple <- function(output_names){
+    lapply(output_names, function(output_name){
+      shinyjs::reset(output_name)
+    })
+  }
+  
+  observeEvent(input$widget_next,{
+    values$widget_counter = values$widget_counter + 1
   })
   
+  observeEvent(input$widget_back,{
+    values$widget_counter = values$widget_counter - 1
+    shinyjs::enable("widget_next")
+    if(values$widget_counter < 0){
+      changeIntroPage("welcome_page")
+      values$widget_counter = 0
+      }
+  })
+  
+  
+  widgets_chr = c("widget_1", "widget_retest", "widget_upload_incomplete",
+                  "widget_numitems", "widget_upload_previous", "widget_walker",
+                  "widget_eskimo", "widget_exclude_previous", "widget_resume_upload",
+                  "widget_resume_question")
+  
+  observeEvent(values$widget_counter,{
+    hideMultiple(widgets_chr)
+    enableMultiple(widgets_chr)
+    
+    #### PAGE 1
+    if(values$widget_counter == 0){
+      resetMultiple(widgets_chr)
+      shinyjs::show("widget_retest")
+      shinyjs::show("start_practice")
+      shinyjs::hide("resume")
+      values$widget
+    }
+    
+    #### Page 2
+    if(values$widget_counter == 1){
+      shinyjs::show("start_over")
+        if(input$retest == "1"){
+          shinyjs::show("widget_numitems")
+        } else if(input$retest == "2"){
+          shinyjs::disable("widget_next")
+          shinyjs::show("widget_upload_previous")
+        }
+    }
+    
+    #### PAGE 3
+    if (values$widget_counter == 2){
+        if(input$retest == "1"){
+          if(input$numitems=="30_walker"){
+            shinyjs::show("widget_walker")
+          } else if (input$numitems == "175_standard") {
+            shinyjs::show("widget_resume_question")
+            
+          } else {
+            changeIntroPage("instructions_page")
+          }
+        } else if(input$retest == "2"){
+          shinyjs::show("widget_numitems")
+        }
+      
+    }
+    
+    if (values$widget_counter == 3){
+      
+
+      if(input$retest == "1"){
+        if(input$numitems=="30_walker"){
+          changeIntroPage("instructions_page")
+        } else if(input$resume_question=="resume" & input$numitems == "175_standard"){
+          shinyjs::disable("widget_next")
+          shinyjs::show("widget_resume_upload")
+          shinyjs::show("resume")
+          shinyjs::hide("start_practice")
+        } else if (input$numitems == "175_standard"){
+          shinyjs::show("widget_eskimo")
+        } else {
+          changeIntroPage("instructions_page")
+        }
+        
+      } else if(input$retest == "2"){
+        if(input$numitems=="30_walker"){
+          shinyjs::show("widget_walker")
+        } else if (input$numitems == "175_standard") {
+          shinyjs::show("widget_resume_question")
+        } else if(input$numitems == "30_cat" | input$numitems == "SEM"){
+          shinyjs::show("widget_exclude_previous")
+        } else {
+          changeIntroPage("instructions_page")
+        }
+      }
+      
+      
+    }
+    
+    if(values$widget_counter == 4){
+      
+      if(input$retest == "1"){
+        if(input$resume_question=="resume" & input$numitems == "175_standard"){
+          shinyjs::show("widget_eskimo")
+        } else {
+          changeIntroPage("instructions_page")
+        }
+      } else if(input$retest == "2"){
+        if(input$numitems=="30_walker"){
+          changeIntroPage("instructions_page")
+        } else if(input$resume_question=="resume" & input$numitems == "175_standard"){
+          shinyjs::disable("widget_next")
+          shinyjs::show("widget_resume_upload")
+          shinyjs::show("resume")
+          shinyjs::hide("start_practice")
+        } else if (input$numitems == "175_standard"){
+          shinyjs::show("widget_eskimo")
+        } else {
+          changeIntroPage("instructions_page")
+        }
+      }
+      
+    }
+    
+    if (values$widget_counter == 5){
+      if(input$retest == "1"){
+        changeIntroPage("instructions_page")
+      } else if (input$retest == "2"){
+        if(input$resume_question=="resume" & input$numitems == "175_standard"){
+          shinyjs::show("widget_eskimo")
+        } else {
+          changeIntroPage("instructions_page")
+        }
+        
+      }
+    } 
+    
+    if (values$widget_counter == 6){
+      changeIntroPage("instructions_page")
+    }
+
+    print(values$widget_counter)
+  })
   
   ##############################################################################
   ##############################################################################
@@ -139,110 +292,61 @@ app_server <- function( input, output, session ) {
       shinyjs::hide("retest_div")
       shinyjs::reset("file1")
       shinyjs::enable("next_test")
-      updateRadioButtons(session, "numitems",
+      shinyWidgets::updateRadioGroupButtons(session, "numitems",
                          label = NULL, #"Select PNT Test Administration",
                          choices = c(
-                           "30-item Computer Adaptive" = "30_cat",
-                           "175-item Computer Adaptive" = "175_cat",
-                           #"Variable length Computer Adaptive PNT" = "SEM",
-                           "30-item Short form (Walker)" = "30_walker",
-                           "175-item Standard" = "175_standard"
+                           "30-item Adaptive Test" = "30_cat",
+                           "175-item Adaptive Test" = "175_cat",
+                           "30-item Static Test" = "30_walker",
+                           "175-item Standard Test " = "175_standard"
                          ),
-                         selected = "30_cat",
-                         inline = F)
+                         selected = "30_cat")
       
     } else {
      
       shinyjs::show("retest_div")
       shinyjs::disable("next_test")
-      updateRadioButtons(session, "numitems", 
+      shinyWidgets::updateRadioGroupButtons(session, "numitems", 
                          label = NULL, #"Select PNT Test Administration",
                          choices = c(
-                           "30-item Computer Adaptive" = "30_cat",
-                           "175-item Computer Adaptive" = "175_cat",
-                           "30-item Short form (Walker)" = "30_walker",
-                           "175-item Standard" = "175_standard",
-                           "Variable length Computer Adaptive" = "SEM"
+                           "30-item Adaptive Test" = "30_cat",
+                           "175-item Adaptive Test" = "175_cat",
+                           "30-item Static Test" = "30_walker",
+                           "175-item Standard Test " = "175_standard",
+                           "Variable-length Adaptive Test" = "SEM"
                          ),
-                         selected = "30_cat",
-                         inline = F)
+                         selected = "30_cat")
     
     }
   })
   
+  output$test_description <- renderUI({
+    #req(input$numitems)
+    get_test_description(selected_test = input$numitems)
+  })
+
+  
   observe({
     # These options are available for new_test. 
     # They are shown on the new test page. 
-    if(isTruthy(values$new_test)){
       
        if(input$numitems == "175_standard"){
           # full pnt standard administration
-          values$test_length = ifelse(input$eskimo, 174, 175)
-          shinyjs::show("eskimo")
-          shinyjs::hide("walker")
+          values$test_length = ifelse(input$eskimo=="Yes", 174, 175)
         } else if(input$numitems == "175_cat"){
           # full pnt cat administration
           values$test_length = 174
-          shinyjs::hide("eskimo")
-          shinyjs::hide("walker")
         } else if(input$numitems == "30_cat"){
           # fixed length IRT
           values$test_length = 30
-          shinyjs::hide("eskimo")
-          shinyjs::hide("walker")
+        } else if (input$numitems == "SEM"){
+          values$test_length = "SEM"
         } else { # this is the walker condition
           values$test_length = 30
-          shinyjs::show("walker")
-          shinyjs::hide("eskimo")
         }
-    } else { # These options are for the rettest page. 
-      
-      # if the second test is a variable length. 
-      if(input$numitems == "SEM"){
-        # set values. 
-        values$test_length <- "SEM"
-        # by default the exclude previous option is set to TRUE
-        shinyjs::disable("exclude_previous")
-        updateCheckboxInput(session, "exclude_previous", value = TRUE)
-        # hide these options
-        shinyjs::hide("walker")
-        shinyjs::hide("eskimo")
-        
-      } else if(input$numitems == "30_cat"){
-        
-        # fixed length IRT of length 30
-        values$test_length = 30
-        shinyjs::enable("exclude_previous") # option is available to exclude previous. 
-        updateCheckboxInput(session, "exclude_previous", value = TRUE)
-        shinyjs::hide("walker")
-        shinyjs::hide("eskimo")
-        
-      } else if(input$numitems == "175_cat"){
-        
-        values$test_length = 174
-        shinyjs::disable("exclude_previous")
-        updateCheckboxInput(session, "exclude_previous", value = FALSE)
-        shinyjs::hide("walker")
-        shinyjs::hide("eskimo")
-        
-      } else if(input$numitems == "175_standard"){# full pnt
-        values$test_length = ifelse(input$eskimo, 174, 175)
-        shinyjs::disable("exclude_previous")
-        updateCheckboxInput(session, "exclude_previous", value = FALSE)
-        shinyjs::hide("walker")
-        shinyjs::show("eskimo")
-        
-      } else { #Final condition is for the walker test. No need to exclude previous
-        
-        values$test_length = 30
-        shinyjs::disable("exclude_previous")
-        updateCheckboxInput(session, "exclude_previous", value = FALSE)
-        shinyjs::show("walker")
-        shinyjs::hide("eskimo")
-        
-      }
-    }
-  })
+    cat(paste("New test length:", values$test_length, "\n"))
+    })
+
   
   ##############################################################################
   ##############################################################################
@@ -361,8 +465,8 @@ app_server <- function( input, output, session ) {
     values$n = NULL # reset values$n - this is the slide number (e.g. slide1 if n =1)
     values$key_val = NULL # keeps track of button press 1 (error), 2 (correct)...make sure empty
     values$exclude_previous <- ifelse(values$new_test, F, input$exclude_previous) 
-    values$notes = input$notes # holds notes
-    values$eskimo <- input$eskimo# include eskimo?
+    #values$notes = ifelse(nchar(input$notes>0), input$notes, NA) # holds notes
+    values$eskimo <- ifelse(input$eskimo=="Yes", TRUE, FALSE)# include eskimo?
     
     # These things need to happen for new tests
     # also saving values for the test item selections
@@ -441,7 +545,6 @@ app_server <- function( input, output, session ) {
     
     # keeps track of the number of items
     values$i = 1
-    
     values$n = # slide number for first slide
       if(isTruthy(values$IRT)){ # if computer adaptive...
       # samples one of four first possible items, unless used previously...
@@ -454,6 +557,7 @@ app_server <- function( input, output, session ) {
      } else {
       14 #otherwise candle for standard PNT
      }
+    
     values$irt_out <- list(0, 0, 11) # reset saved data just in case. 
     # got to slides, reset keyval
     values$key_val = NULL # keeps track of button press 1 (error) or 2 (correct)
@@ -513,12 +617,12 @@ app_server <- function( input, output, session ) {
       # can you download data? yes - will calculate the data to go out. 
       values$downloadableData = T
       shinyjs::enable("downloadIncompleteData")
-      
+
       # require a key input response
       if(is.null(values$key_val)){ 
         showNotification("Enter a score", type = "error")
       } else { 
-        
+
         ########################################################################
         # store key press in our dataframe of items,
         # 1 is incorrect (1) and 2 is correct (0); (IRT model reverses 1 and 0...)
@@ -546,7 +650,7 @@ app_server <- function( input, output, session ) {
           ifelse(values$key_val == incorrect_key_response,"incorrect",
                  ifelse(values$key_val == correct_key_response,"correct", "NR")
           )
-        
+
         ########################################################################
         # irt_function: current data, (values$item_difficulty) w/ most recent response 
         ########################################################################
@@ -557,7 +661,7 @@ app_server <- function( input, output, session ) {
                                       exclude_eskimo = values$eskimo,
                                       walker = values$walker
         )
-        
+
         ########################################################################
         # Append output of the CAT/IRT function....ability and SEM estimates
         ########################################################################
@@ -568,7 +672,7 @@ app_server <- function( input, output, session ) {
         # pick the next slide using the output of the irt
         ########################################################################
         values$n = # values$n refers to the slide number of next pnt item (e.g. the image file name)
-          if(values$IRT){ # if its a computer adaptive test, use this element from the IRT out list
+          if(isTRUE(values$IRT)){ # if its a computer adaptive test, use this element from the IRT out list
             if(!is.na(values$irt_out[[2]][[1]])){ # as long as its not na
               values$item_difficulty[values$item_difficulty$target == values$irt_out[[2]]$name,]$slide_num
             } else {
@@ -578,7 +682,7 @@ app_server <- function( input, output, session ) {
             values$irt_out[[2]][[2]]
           } 
         # values$i = values$i + 1
-       
+
       ########################################################################
       # Should the test end and go to the results page? and subsequent operations
       ########################################################################
@@ -590,10 +694,14 @@ app_server <- function( input, output, session ) {
         go_to_results = values$irt_out[[3]]<values$min_sem # is the new sem  less than the min of the previos test?
       } else {
         go_to_results = values$i==values$test_length # number of slides seen (+1) exceeds the test length # was < 
+        if(values$i==values$test_length){
+          cat(paste("Values$i == values$test_length:"), values$i, values$test_length, "\n")
+        }
       }
-      
+
       # go to results if indicated
       if (isTruthy(go_to_results)){
+        cat("Go to results triggered \n")
         shinyjs::js$gettime() # log time for end of test. 
         
         # if its the end of the test, calculate the final ability/sem values
@@ -601,9 +709,14 @@ app_server <- function( input, output, session ) {
           get_final_numbers(out = values$irt_out,
                             previous = values$previous,
                             num_previous = values$num_previous)
+        
+        cat("Got final numbers \n")
         # go to the results page. 
         values$results_data_long = get_results_data_long(values)
+        cat("Got results data long \n")
         updateNavbarPage(session, "mainpage", selected = "Results")
+        
+        cat("Updated page to results \n")
         #req(input$mainpage=="Results")
         #values$current_page = input$mainpage
         # show the download buttons
@@ -777,7 +890,8 @@ app_server <- function( input, output, session ) {
     file <- input$file_incomplete
 
     incomplete_dat <- read.csv(file$datapath)
-    current_test = input$numitems
+    test = unique(incomplete_dat$test)
+    
     
     if (!all(c("key", "sem", "ability", "order", "test", "resp", "response",
               "item_number", "itemDifficulty", "discrimination") %in% colnames(incomplete_dat))) {
@@ -787,49 +901,54 @@ app_server <- function( input, output, session ) {
       values$item_difficulty <- items
       shinyjs::reset("file_incomplete")
 
-    } else if (incomplete_dat$test[1] != current_test) {
+    } else if (!grepl("175_standard", x = test)) {
       
-      showNotification("Error: Please select the same test to continue", type = "error")
+      showNotification("Error: Resume test is only available for the standard 175-item PNT", type = "error")
+      incomplete_dat <- NULL
+      values$item_difficulty <- items
       shinyjs::reset("file_incomplete")
-
-    } else {
       
-      shinyjs::enable("resume")
+    } else {
+      shinyjs::enable("widget_next")
+      values$start_time = unique(incomplete_dat$start)
       values$item_difficulty <- incomplete_dat
       values$item_difficulty <- values$item_difficulty[order(values$item_difficulty$item_number), , drop = FALSE]
-     # print(head(values$item_difficulty, 10))
+      test = unique(incomplete_dat$test)
+      walkerform = unique(incomplete_dat$walker)
+      print(test)
+      shinyWidgets::updateRadioGroupButtons(session = session, inputId = "numitems", selected = test)
+      shinyWidgets::updateRadioGroupButtons(session = session, inputId = "walker", selected = walkerform)
+      shinyjs::disable("widget_numitems")
+      shinyjs::disable("widget_walker")
+      print("end")
     }
 
   })
   
   observeEvent(input$resume,{
     showModal(modalDialog(
-      h4("Click to resume the test"),
+      #h4("Click to resume the test"),
       tags$img(src = paste0("slides/Slide", 1, ".jpeg"), id = "instructions"),
       easyClose = TRUE,
       size = "l",
     ))
     
     ### start practice stuff  ############################################
+    
+    #### NEED TO FIX THIS STUFF HERE TO BE BASED ON UPLOADED DOC!!!
+    # Ithink this is actually ok now. A lot can be deleted since we're only
+    # resuming the 175 item test. 
     values$key_val = NULL # keeps track of button press 1 (error), 2 (correct)
-    values$exclude_previous <- ifelse(values$new_test, F, input$exclude_previous) # only informs second tests
+    values$exclude_previous <- ifelse(values$new_test, FALSE,
+                                      ifelse(input$exclude_previous=="Yes", TRUE, FALSE)) # only informs second tests
     # only use IRT function if NOT 175 items
     #values$name = input$name
     values$notes = input$notes
-    values$eskimo <- input$eskimo
-      # IRT is poorly named - this should say CAT - aka not computer adaptive is CAT = F
-      # computer adaptive if the string cat is in the num items inputs
+    values$eskimo <- ifelse(input$eskimo=="Yes", TRUE, FALSE)
       values$selected_test = input$numitems
-      values$IRT = ifelse(grepl( "cat", input$numitems), TRUE, FALSE)
-      # walker is true if the string walker is in the num items inputs
-      values$walker = ifelse(grepl("walker", input$numitems), TRUE, FALSE)
-      values$exclude_previous = F
-      values$walker_form = input$walker
-      if(isTruthy(values$walker)){
-        values$item_difficulty = values$item_difficulty[values$item_difficulty$walker == input$walker,]
-        
-      }
-
+      values$IRT = FALSE
+      values$walker = FALSE
+      values$exclude_previous = FALSE
 
     shinyjs::show("start_over")
 
@@ -845,7 +964,7 @@ app_server <- function( input, output, session ) {
                                   walker = values$walker
     )
     values$n = 
-      if(values$IRT){
+      if(isTRUE(values$IRT)){
         if(!is.na(values$irt_out[[2]][[1]])){
           values$item_difficulty[values$item_difficulty$target == values$irt_out[[2]]$name,]$slide_num
         } else {
@@ -923,10 +1042,8 @@ app_server <- function( input, output, session ) {
       if(!isTruthy(values$score_uploaded_test)){
         values$end_time = as.character(strptime(input$jstime,
                                                 format = '%a %b %d %Y %H:%M:%S GMT%z'))
-        values$duration = as.POSIXlt(values$end_time)-as.POSIXlt(values$start_time)
-        cat("Testing ended on", values$end_time, "\n",
-            "Total testing time was", round(values$duration[[1]], 2),
-                                          units(values$duration), "\n")
+        #values$duration = as.POSIXlt(values$end_time)-as.POSIXlt(values$start_time)
+        cat("Testing ended on", values$end_time, "\n")
       }
 
       }

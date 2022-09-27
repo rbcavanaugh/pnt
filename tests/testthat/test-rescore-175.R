@@ -1,7 +1,7 @@
-test_that("score uploaded test 175", {
+test_that("score uploaded test 175", { 
 
   #########################################################
-  # Get app to results page
+  # Get app to results page # updated for new flow
   #########################################################
 
   app <- ShinyDriver$new(here::here(), seed = 1)

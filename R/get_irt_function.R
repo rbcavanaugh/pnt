@@ -20,7 +20,7 @@
 #' @param walker is it a walker short form test
 #' @return A list with ability first then the next item then the sem
 #' @export
-irt_function <- function(all_items, IRT = T, exclude_previous = F, previous, exclude_eskimo = T, walker = F){
+irt_function <- function(all_items, IRT = TRUE, exclude_previous = FALSE, previous, exclude_eskimo = TRUE, walker = FALSE){
 
       ##############################################################################
       # Set up necessary data for the catR function
@@ -35,7 +35,7 @@ irt_function <- function(all_items, IRT = T, exclude_previous = F, previous, exc
       #   dplyr::pull(item_number)
 
       # don't re-use previous items
-      if(exclude_previous){
+      if(isTRUE(exclude_previous)){
         # previously_completed = previous %>%
         # # selects only done items and grabs them.
         #                         dplyr::pull(item_number)
@@ -79,7 +79,7 @@ irt_function <- function(all_items, IRT = T, exclude_previous = F, previous, exc
        ##############################################################################
        
        # If we're doing a computer adaptive test:
-       if(IRT){
+       if(isTRUE(IRT)){
          completed = c(completed, 49) # removes eskimo from the item pool. 
          if(length(completed)<175){ # as long as we haven't done 175 items
            next_item = catR::nextItem(itemBank = bank, theta = ability, out = completed,
@@ -98,7 +98,7 @@ irt_function <- function(all_items, IRT = T, exclude_previous = F, previous, exc
        return(tmp_list)
          
         # If we're doing one of the walker short-forms
-       } else if(walker) {
+       } else if(isTRUE(walker)) {
 
          next_slide_num <- all_items
          next_slide_num$next_item = ifelse(!is.na(next_slide_num$response), next_slide_num$walker_order+1, NA)
@@ -119,7 +119,7 @@ irt_function <- function(all_items, IRT = T, exclude_previous = F, previous, exc
          
       # IF we're doing the standard PNT
     } else { 
-        if(exclude_eskimo){ # if excluding eskimo...
+        if(isTRUE(exclude_eskimo)){ # if excluding eskimo...
       
           # deal with eskimo here...
         next_slide_num <- all_items[all_items$item_number != 49 & is.na(all_items$response),]

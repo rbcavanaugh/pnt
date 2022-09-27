@@ -1,7 +1,7 @@
 Package: pnt
 Title: Computer adaptive forms of the Philadelphia Naming Test
-Version: 0.0.0.9000
-Date: 2021-10-6
+Version: 0.1.0
+Date: 2022-09-27
 Authors@R: 
     c(
     person(given = 'Robert',
@@ -37,12 +37,13 @@ Imports:
     markdown,
     magrittr,
     utils,
-    stats
+    stats,
+    shinyWidgets
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.2.1
-URL: https://aphasia-apps.github.io/pnt/, https://github.com/aphasia-apps/pnt
-BugReports: https://github.com/aphasia-apps/pnt/issues
+URL: https://rbcavanaugh.github.io/pnt/, https://github.com/rbcavanaugh/pnt
+BugReports: https://github.com/rbcavanaugh/pnt/issues
 Suggests: 
     rmarkdown,
     testthat (>= 3.0.0)

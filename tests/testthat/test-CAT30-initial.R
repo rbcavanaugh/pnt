@@ -8,7 +8,10 @@ test_that("PNT-CAT30-initial", {
   responses <- c(rep(c(1,2), 15))
   #app$setInputs(welcome_next = "click", timeout_ = 1000)
   app$setInputs(administer_test = "click")
-  app$setInputs(next_test = "click")
+  
+  app$setInputs(widget_next = "click")
+  app$setInputs(widget_next = "click")
+  
   app$setInputs(start_practice = "click")
 
   app$executeScript("Mousetrap.trigger('enter');")

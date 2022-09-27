@@ -17,7 +17,7 @@ get_data_for_download <- function(values, in_progress){
   tmp <- get_results_data_long(values)
 
   tmp$test = values$selected_test
-  
+  print(head(tmp))
 
   # only add walker column for walker tests. otherwise just confusing. 
  if(grepl("walker", values$selected_test)){
@@ -25,23 +25,25 @@ get_data_for_download <- function(values, in_progress){
     columns = c("item_number", "target", "key", "resp", "response", "discrimination",
                 "itemDifficulty", "slide_num", "order", "pnt_order", "ability", "sem", "ci95_lower",
                 "ci95_upper", "test", "walker", "walker_order", "start", "end", "notes")
+    cat("Used walker columns \n")
     
   } else {
     
     columns = c("item_number", "target", "key", "resp", "response", "discrimination",
                 "itemDifficulty", "slide_num", "order", "pnt_order", "ability", "sem", "ci95_lower",
-                "ci95_upper", "test",
-                # "walker", "walker_order",
-                "start", "end", "notes")
-   
+                "ci95_upper", "test", "start", "end", "notes")
+    cat("Used non-walker columns \n")
   }
-
-dat_out <- tmp[,columns]
-
+  
+  write.csv(tmp, here::here("tests", "testthat", "files", "tmp.csv"))
+print(colnames(tmp))
+dat_out <- subset(tmp, select = columns)
+print(colnames(dat_out))
 if(in_progress == "Assessment" & isTruthy(values$IRT)){
     dat_out$notes[2] = "Test ended before completed"
     dat_out$notes[3] = "Next item"
     dat_out$notes[4] = values$irt_out[[2]]$name
 }
+cat("Successfully got data for download \n")
 return(dat_out)   
 }

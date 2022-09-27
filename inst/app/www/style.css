@@ -12,8 +12,61 @@ h2{
   margin-top:0px;
 }
 
+h5{
+  margin-bottom:1rem;
+}
+
 .navbar:not(.fixed-bottom):not(.navbar-fixed-bottom):not(.navbar-fixed-bottom) {
     margin-bottom: 0px;
+}
+
+
+.justify-content-around{
+  height: 80vh;
+}
+
+.widget1 {
+  background-color: #f2f5f7;
+  border: 5px darkgrey;
+  border-radius: 10px;
+  margin-top: 32px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: auto;
+  padding: 3%;
+  align-content: center;
+}
+
+.widget {
+  background-color: #f2f5f7;
+  border: 5px darkgrey;
+  border-radius: 10px;
+  margin: auto auto;
+  padding: 3%;
+  align-content: center;
+  min-width: 390px;
+  /*min-height:200px;*/
+}
+
+.fixh5{
+  min-height:42px;
+  display: flex;
+  align-items: center;
+  
+}
+
+.widget .radiobtn {
+  margin: 0 5px;
+}
+
+#numitems .btn{
+  margin: 5px 0px;
+}
+
+.widgetParent {
+    width: 100%;
+    height: 80vh;
+    display: flex;
 }
 
 .response {
@@ -46,6 +99,21 @@ h2{
   /*background-color:#f1f1f1;*/
   touch-action: manipulation;
 }
+
+.testinfo-fixed{
+  background-color: #f2f5f7;
+  border: 1px solid rgba(0, 0, 0, .3);
+  border-radius:5px;
+  padding: 2%;
+  margin-bottom:0;
+  height: 60vh;
+  max-height: 80vh;
+  overflow-y: auto;
+  margin-left:2%;
+  margin-top:2.5%;
+}
+
+#file1.form-control{margin-bottom:0px;}
 
 .testinfo{
   background-color: #f2f5f7;

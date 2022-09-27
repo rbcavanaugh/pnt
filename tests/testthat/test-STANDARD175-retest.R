@@ -9,11 +9,19 @@ testthat::test_that("PNT-STANDARD 175-retest", {
   
   #app$setInputs(welcome_next = "click")
   app$setInputs(administer_test = "click")
+  
   app$setInputs(retest = "2")
+  app$setInputs(widget_next = "click")
   
   app$uploadFile(file1 = here::here("tests", "testthat", "files", "test_upload_standard175.csv"))
+  app$setInputs(widget_next = "click")
+  
   app$setInputs(numitems = "175_standard")
-  app$setInputs(next_test = "click")
+  app$setInputs(widget_next = "click")
+  
+  app$setInputs(widget_next = "click")
+  
+  
   app$setInputs(start_practice = "click")
 
   app$executeScript("Mousetrap.trigger('enter');")
