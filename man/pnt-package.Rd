@@ -11,9 +11,9 @@ A Shiny web-app for administering and scoring the computer adaptive Philadelphia
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://aphasia-apps.github.io/pnt/}
-  \item \url{https://github.com/aphasia-apps/pnt}
-  \item Report bugs at \url{https://github.com/aphasia-apps/pnt/issues}
+  \item \url{https://rbcavanaugh.github.io/pnt/}
+  \item \url{https://github.com/rbcavanaugh/pnt}
+  \item Report bugs at \url{https://github.com/rbcavanaugh/pnt/issues}
 }
 
 }

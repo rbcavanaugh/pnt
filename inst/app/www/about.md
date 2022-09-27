@@ -11,7 +11,7 @@ To cite this app, please use:
 
 Robert Cavanaugh, Alexander Swiderski, G F and William D. Hula (2021). PNT.CAT:
   TITLE OF THE APPLICATION. R package version 0.0.0.9000.
-  https://github.com/aphaisa-apps/pnt
+  https://github.com/rbcavanaugh/pnt
 
 
 **About us:**

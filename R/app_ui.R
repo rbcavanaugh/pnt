@@ -69,7 +69,7 @@ app_ui <- function(request) {
                          bslib::nav_item(pagetitle()),
                          bslib::nav_item(
                            tags$a(icon("readme"),
-                                  href = "https://aphasia-apps.github.io/pnt",
+                                  href = "https://rbcavanaugh.github.io/pnt",
                                   target = "_blank",
                                   style = "color:black;")
                          )

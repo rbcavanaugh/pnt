@@ -1,0 +1,48 @@
+template:
+  bootstrap: 5
+navbar:
+  structure:
+    left:  [intro, articles]
+    right: [search, github]
+reference:
+- title: internal
+  contents:
+  - accordion_faq
+  - bs_accordion
+  - bs_accordion_item
+  - downloadReportServer
+  - downloadReportUI
+  - downloadResultsServer
+  - downloadResultsUI
+  - get_caption
+  - get_data_for_download
+  - get_endtest_div
+  - get_final_numbers
+  - get_first_item
+  - get_item_warning
+  - get_plot
+  - get_results_data_long
+  - get_test_description
+  - get_text_summary
+  - get_user_time
+  - intro_tab_div
+  - intro_tab_div2
+  - irt_function
+  - minimal_theme
+  - pagetitle
+  - practice_tab_div
+  - results_tab_div
+  - run_app
+  - score_uploaded_data
+  - slides_tab_div
+  - uploadData
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
