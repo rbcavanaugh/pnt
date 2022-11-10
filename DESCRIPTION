@@ -17,6 +17,9 @@ Authors@R:
     person(given = "William D.",
            family = "Hula",
            role = "aut")
+    person(given = "Stacey",
+           family = "Steel",
+           role = "ctb")
     )
 Description: A Shiny web-app for administering and scoring the computer adaptive Philadelphia Naming Test.
 License: AGPL (>= 3)
