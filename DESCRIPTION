@@ -16,7 +16,7 @@ Authors@R:
            role = "aut"),
     person(given = "William D.",
            family = "Hula",
-           role = "aut")
+           role = "aut"),
     person(given = "Stacey",
            family = "Steel",
            role = "ctb")
