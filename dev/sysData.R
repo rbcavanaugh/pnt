@@ -6,12 +6,16 @@
 #   range = c(10, 90)
 # )
 
+version = "0.1.1"
+
+# change DESCRIPTION  and CITATION too for version number
 
 
 usethis::use_data(
   download_df,
   item_key,
   items,
+  irt_params,
   correct_key_response,
   end_test_key,
   enter,
@@ -20,5 +24,5 @@ usethis::use_data(
   response_keys,
   starting_items,
   thetas,
-  irt_params,
+  version,
   internal = T, overwrite = T)

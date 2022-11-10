@@ -44,7 +44,8 @@ downloadReportServer <- function(id, values, name, notes) {
                                       n_items = values$i,
                                       html_p = F),
               caption = get_caption(repeat_admin = !values$new_test),
-              download_time = Sys.time()
+              download_time = Sys.time(),
+              version = version
             )
             
             rmarkdown::render(tempReport, output_file = file,
