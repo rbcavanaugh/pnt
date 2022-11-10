@@ -159,7 +159,7 @@ intro_tab_div2 <- function() {
                                           column(width = 4,
                                                  div(
                                                    h5("Scoring an offline or completed test"),
-                                                   fileInput("file2", "Upload offline or re-scored data", accept = ".csv"),
+                                                   fileInput("file2", "Upload offline or re-scored data", accept = c(".csv", ".xlsx")),
                                                    shinyjs::hidden(div(id = "input_file_warning", uiOutput("upload_error"))),
                                                    div(
                                                      align = "center",
@@ -170,8 +170,11 @@ intro_tab_div2 <- function() {
                                           ),
                                           column(width = 7, class = "testinfo",
                                                  h5("How to upload a file", style = "margin-top:0;margin-bottom:1.25rem;"),
-                                                 includeMarkdown(system.file("app/www/rescore_pnt_notes1.md", package = "pnt")),
-                                                 downloadButton("downloadEmpty", "Download Blank Spreadsheet"),
+                                                 
+                                                 tags$strong("Option 1:"), 
+                                                 a(href="www/pnt-cat-blank.xlsx", "Download Blank Excel Scoresheet (recommended)", download=NA, target="_blank"),
+                                                 span("or"),
+                                                 a(href="www/pnt-cat-blank.csv", "Download Blank .csv Scoresheet", download=NA, target="_blank"),
                                                  br(), br(),
                                                  includeMarkdown(system.file("app/www/rescore_pnt_notes2.md", package = "pnt"))
                                           )

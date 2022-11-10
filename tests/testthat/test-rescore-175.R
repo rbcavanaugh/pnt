@@ -22,8 +22,17 @@ test_that("score uploaded test 175", {
   # are responses tracked accurately? 
   testthat::expect_equal(sum(val$export$results$key=='2', na.rm = T),
                          sum(uploaded_file$key==2, na.rm = T))
-  testthat::expect_equal(sum(val$export$results$key=='1', na.rm = T),
+  # response 1 = correct, 0 = incorrect
+  # key 1 = incorrect, 2 = correct
+  testthat::expect_equal(sum(val$export$results$response==1, na.rm = T),
+                         sum(uploaded_file$key==2, na.rm = T))
+  
+  testthat::expect_equal(sum(val$export$results$key==1, na.rm = T),
                          sum(uploaded_file$key==1, na.rm = T))
+  
+  testthat::expect_equal(sum(val$export$results$response==0, na.rm = T),
+                         sum(uploaded_file$key==1, na.rm = T))
+  
   # Are the test administration final numbers saved?
   testthat::expect_equal(sum(!is.na(val$export$irt_final)), 2)
   # Make sure 30 items were administered:

@@ -12,9 +12,9 @@ score_uploaded_data <- function(values){
   dat$resp = ifelse(dat$key == 1, "incorrect",
                     ifelse(dat$key == 2, 
                            "correct", NA))
-  dat$response = ifelse(dat$key == 1, 1,
+  dat$response = ifelse(dat$key == 1, 0,
                         ifelse(dat$key == 2, 
-                               0, NA))
+                               1, NA))
   } else {
     # 
     dat = values$rescore
