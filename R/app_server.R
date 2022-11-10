@@ -985,21 +985,10 @@ app_server <- function( input, output, session ) {
   ########################## SCORE EXISTING TEST MODAL #########################
   ##############################################################################
   ##############################################################################
-  # downloading empty file
-  output$downloadEmpty <- downloadHandler(
-    filename = function() {
-      "pnt-cat-blank.csv"
-    },
-    content = function(file) {
-      write.csv(download_df,
-                file,
-                row.names = FALSE)
-    }
-  )
   
   # observer for uploading data - including error messages
   observeEvent(input$file2,{
-    uploadedData <- uploadData(input$file2, rescore = T)
+    uploadedData <- uploadData(input$file2)
     values$rescore <- uploadedData$dat
     # depending on the error message, allow progressing or show the error
     if(is.na(uploadedData$error)){
