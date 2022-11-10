@@ -36,7 +36,7 @@ app_ui <- function(request) {
       
       ################################### layout starts here ######################### 
       
-      navbarPage(title = span("pnt-cat", span("v0.1.0 (beta)", style = "font-size:0.8em;color:grey;")), # App title
+      navbarPage(title = span("pnt-cat", span(paste0(' v', version), style = "font-size:0.8em;color:grey;")), # App title
                  id = "mainpage", # id of page so you can access current page with input$mainpage
                  theme = minimal_theme(), # theme function from {bslib}. see theme.R
 

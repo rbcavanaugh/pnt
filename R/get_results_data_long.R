@@ -26,7 +26,7 @@ get_results_data_long <- function(values){
   tmp$end = values$end_time
   tmp$notes = NA
   tmp = tmp[order(tmp$order), , drop = FALSE]
-  tmp$notes[[1]] = "Version: 0.0.9"
+  tmp$notes[[1]] = version
   cat("Successfully got results data long \n")
   return(tmp)
   

@@ -24,7 +24,7 @@ To cite in publications use:
 
 Cavanaugh, R., Swiderski, A.M., Fergadiotis, G. & Hula, W.D. (2020).
 pnt: Computer adaptive forms of the Philadelphia Naming Test. Version
-0.1.0 Available from <https://github.com/rbcavanaugh/pnt>.
+0.1.1 Available from <https://github.com/rbcavanaugh/pnt>.
 
 For users looking for a deeper dive into principles of item-response
 theory and computer adaptive testing in aphasia, we recommend:
