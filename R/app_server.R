@@ -295,10 +295,10 @@ app_server <- function( input, output, session ) {
       shinyWidgets::updateRadioGroupButtons(session, "numitems",
                          label = NULL, #"Select PNT Test Administration",
                          choices = c(
-                           "30-item Adaptive Test" = "30_cat",
-                           "175-item Adaptive Test" = "175_cat",
-                           "30-item Static Test" = "30_walker",
-                           "175-item Standard Test " = "175_standard"
+                           "30-item Adaptive PNT" = "30_cat",
+                           "Full Adaptive PNT" = "175_cat",
+                           "30-item Static PNT" = "30_walker",
+                           "Standard PNT" = "175_standard"
                          ),
                          selected = "30_cat")
       
@@ -309,11 +309,11 @@ app_server <- function( input, output, session ) {
       shinyWidgets::updateRadioGroupButtons(session, "numitems", 
                          label = NULL, #"Select PNT Test Administration",
                          choices = c(
-                           "30-item Adaptive Test" = "30_cat",
-                           "175-item Adaptive Test" = "175_cat",
-                           "30-item Static Test" = "30_walker",
-                           "175-item Standard Test " = "175_standard",
-                           "Variable-length Adaptive Test" = "SEM"
+                           "30-item Adaptive PNT" = "30_cat",
+                           "Full Adaptive PNT" = "175_cat",
+                           "30-item Static PNT" = "30_walker",
+                           "Full Standard PNT " = "175_standard",
+                           "Variable-length Adaptive PNT" = "SEM"
                          ),
                          selected = "30_cat")
     

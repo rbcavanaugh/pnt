@@ -5,18 +5,18 @@ get_test_description <- function(selected_test){
   
   if(selected_test == "30_cat"){
    div_out = div(
-      tags$h5("30-item Computer Adaptive Test (Fergadiotis et al., 2019):", style = "margin-top:0;margin-bottom:1.25rem;"),
-      tags$p("This test adaptively administers 30 items, beginning with an item targeting average naming ability.
+      tags$h5("30-item Computer Adaptive PNT (Fergadiotis et al., 2019):", style = "margin-top:0;margin-bottom:1.25rem;"),
+      tags$p("This test adaptively administers 30 items,* beginning with an item targeting average naming ability.
              Items are selected to provide the maximum reduction in the standard error of measurement based
              on the cumulative responses collected. Score estimates from the PNT-CAT30 correlated 0.95 with scores
              from the full PNT and are suitable for estimating the overall severity of anomia in persons with aphasia.
-             Change in naming ability can be assessed using a subsequent PNT-CAT30 or Variable Length PNT-CAT."),
+             Change in naming ability can be assessed using a subsequent 30-item adaptive PNT or a Variable Length PNT."),
       tags$em("Average administration time: 8-9 Minutes.")
     )
   } else if(selected_test == "175_cat"){
     div_out = div(
-      tags$h5("175-item Computer Adaptive Test (Fergadiotis et al., 2019):", style = "margin-top:0;margin-bottom:1.25rem;"),
-      tags$p("This test provides administration of (up to) 175 items in adaptive order, beginning with an item targeting
+      tags$h5("Full Computer Adaptive PNT (Fergadiotis et al., 2019):", style = "margin-top:0;margin-bottom:1.25rem;"),
+      tags$p("This test administers up to 174 items* in adaptive order, beginning with an item targeting
              average naming ability, and proceeding as described above for the PNT-CAT30. This test should be used
              when a more, or maximally precise score estimate is required relative to the PNT-CAT30. Users can
              stop this test at any point during administration, provided that at least 30 items were administered. 
@@ -27,7 +27,7 @@ get_test_description <- function(selected_test){
   } else if(selected_test == "30_walker"){
     div_out = div(
       tags$h5("30-item Static Short Forms Test (Walker & Schwartz, 2012):", style = "margin-top:0;margin-bottom:1.25rem;"),
-      tags$p("These are two static 30-item PNT short forms with non-overlapping items.
+      tags$p("These are two static 30-item* PNT short forms with non-overlapping items.
                  The two short forms correlated highly with each other (0.93), and with the full PNT
                  (0.93 and 0.98). This application provides T-score estimates for these short forms on
                  the same scale as the other test versions. Change in naming ability can be assessed
@@ -36,8 +36,8 @@ get_test_description <- function(selected_test){
     )
   } else if(selected_test == "175_standard"){
     div_out = div(
-      tags$h5("175-item Standard PNT  (Roach et al., 1996)", style = "margin-top:0;margin-bottom:1.25rem;"),
-      tags$p("This option provides administration of all 175 items in standard PNT administration order.
+      tags$h5("Full Standard PNT  (Roach et al., 1996)", style = "margin-top:0;margin-bottom:1.25rem;"),
+      tags$p("This option provides administration of all 175 items* in standard PNT administration order.
              Although this test can also be stopped at any point during administration and will provide 
              a theoretically valid score estimate and standard error, this is not recommended because 
              we have not collected evidence regarding the validity of short form score estimates
