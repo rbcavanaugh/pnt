@@ -55,10 +55,10 @@ intro_tab_div <- function() {
                                   inputId = "numitems", 
                                   label = NULL,
                                   choices = c(
-                                    "30-item Computer Adaptive" = "30_cat",
-                                    "175-item Computer Adaptive" = "175_cat",
-                                    "30-item Short form (Walker)" = "30_walker",
-                                    "175-item Standard" = "175_standard"
+                                    "30-item Adaptive PNT" = "30_cat",
+                                    "Full Adaptive PNT" = "175_cat",
+                                    "30-item Static PNT" = "30_walker",
+                                    "Standard PNT" = "175_standard"
                                   ),
                                   selected = "30_cat",
                                   inline = F
