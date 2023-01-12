@@ -32,8 +32,7 @@ shiny::setProgress(0.1)
 <br>
 
 ```{r, echo=F, fig.height=3, fig.width=5, warning = F, fig.align='center'}
-
-plot <- get_plot(params$irt_final, basesize = 10, line_weight = 1)
+plot <- pnt::get_plot(params$irt_final, basesize = 10, line_weight = 1)
 shiny::setProgress(0.4)
 plot
 shiny::setProgress(0.7)

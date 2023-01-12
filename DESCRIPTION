@@ -42,7 +42,7 @@ Imports:
     readxl
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 URL: https://rbcavanaugh.github.io/pnt/, https://github.com/rbcavanaugh/pnt
 BugReports: https://github.com/rbcavanaugh/pnt/issues
 Suggests: 
