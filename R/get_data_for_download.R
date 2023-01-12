@@ -35,7 +35,6 @@ get_data_for_download <- function(values, in_progress){
     cat("Used non-walker columns \n")
   }
   
-  write.csv(tmp, here::here("tests", "testthat", "files", "tmp.csv"))
 print(colnames(tmp))
 dat_out <- subset(tmp, select = columns)
 print(colnames(dat_out))
