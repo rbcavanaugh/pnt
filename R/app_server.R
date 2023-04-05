@@ -584,10 +584,12 @@ app_server <- function( input, output, session ) {
 
   # Experimental - play sound when a new page appears
   observeEvent(values$i,{
-    if(values$i > 2 & values$i < 13 & input$mainpage == "Practice"){
-      shinyjs::runjs('var audio = new Audio("www/click.wav"); audio.play();')
-    } else if (input$mainpage == "Assessment" & values$done == FALSE){
-      shinyjs::runjs('var audio = new Audio("www/click.wav"); audio.play();')
+    if(isTRUE(input$sound)){
+        if(values$i > 2 & values$i < 13 & input$mainpage == "Practice"){
+          shinyjs::runjs('var audio = new Audio("www/click.wav"); audio.play();')
+        } else if (input$mainpage == "Assessment" & values$done == FALSE){
+          shinyjs::runjs('var audio = new Audio("www/click.wav"); audio.play();')
+        }
     }
   })
   

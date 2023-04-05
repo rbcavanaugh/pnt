@@ -195,8 +195,18 @@ intro_tab_div2 <- function() {
                                                    ),
                                                    shinyjs::hidden(
                                                      actionButton("resume","Resume Test")
+                                                   ), br(), br(),
+                                                   shinyWidgets::switchInput(
+                                                     inputId = "sound",
+                                                     onLabel = "On",
+                                                     label = "Sound",
+                                                     offLabel = "Off",
+                                                     value = TRUE,
+                                                     inline = TRUE,
+                                                     size = "mini"
                                                    )
-                                                 ),br()#,
+                                                 )
+                                                 #,
                                                  # div(
                                                  #   h5("Resume incomplete test"),
                                                  #   p("To resume an incomplete test, upload file with in-progress
