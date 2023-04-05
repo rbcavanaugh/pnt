@@ -31,6 +31,7 @@ app_server <- function( input, output, session ) {
   values$endTestEarly = F
   values$widget_counter = 0
   values$widget_logic = list()
+  values$done = FALSE
   
   ################################################################################
   ########################## Dealing with user's time ############################
@@ -273,7 +274,7 @@ app_server <- function( input, output, session ) {
       changeIntroPage("instructions_page")
     }
 
-    print(values$widget_counter)
+    #print(values$widget_counter)
   })
   
   ##############################################################################
@@ -562,6 +563,7 @@ app_server <- function( input, output, session ) {
     # got to slides, reset keyval
     values$key_val = NULL # keeps track of button press 1 (error) or 2 (correct)
     updateNavbarPage(session, "mainpage", selected = "Assessment")
+    shinyjs::runjs('var audio = new Audio("www/click.wav"); audio.play();')
     
     # prints to the console for  troubleshooting
     cat(paste(
@@ -580,6 +582,15 @@ app_server <- function( input, output, session ) {
   ##############################################################################
   ##############################################################################
 
+  # Experimental - play sound when a new page appears
+  observeEvent(values$i,{
+    if(values$i > 2 & values$i < 13 & input$mainpage == "Practice"){
+      shinyjs::runjs('var audio = new Audio("www/click.wav"); audio.play();')
+    } else if (input$mainpage == "Assessment" & values$done == FALSE){
+      shinyjs::runjs('var audio = new Audio("www/click.wav"); audio.play();')
+    }
+  })
+  
   # This is where the app will interact with the -CAT-IRT algorithm
   observeEvent(input$enter_key, {
     
@@ -730,6 +741,8 @@ app_server <- function( input, output, session ) {
           #"Other way of calc all items:", sum(!is.na(values$results_data_long$key)), "\n",
           "----------------------------------------", "\n"
         ))
+        
+        values$done = TRUE
         
       }
       ############################################################################
