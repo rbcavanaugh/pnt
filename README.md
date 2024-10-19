@@ -22,7 +22,7 @@ issue: <https://github.com/rbcavanaugh/pnt/issues>.
 
 To cite in publications use:
 
-Cavanaugh, R., Swiderski, A.M., Fergadiotis, G. & Hula, W.D. (2020).
+Cavanaugh, R., Swiderski, A.M., Fergadiotis, G. & Hula, W.D. (2022).
 pnt: Computer adaptive forms of the Philadelphia Naming Test. Version
 0.1.1 Available from <https://github.com/rbcavanaugh/pnt>.
 
