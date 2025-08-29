@@ -474,7 +474,7 @@ app_server <- function( input, output, session ) {
       values$selected_test = input$numitems
       # IRT is poorly named - this should say CAT - aka not computer adaptive is CAT = F
       # computer adaptive if the string cat is in the num items inputs
-      values$IRT = ifelse(grepl( "cat", input$numitems), TRUE, FALSE)
+      values$IRT = ifelse(grepl( "cat|SEM", input$numitems), TRUE, FALSE)
       
       # walker is true if the string walker is in the num items inputs
       values$walker = ifelse(grepl("walker", input$numitems), TRUE, FALSE)
@@ -892,7 +892,6 @@ app_server <- function( input, output, session ) {
     incomplete_dat <- read.csv(file$datapath)
     test = unique(incomplete_dat$test)
     
-    
     if (!all(c("key", "sem", "ability", "order", "test", "resp", "response",
               "item_number", "itemDifficulty", "discrimination") %in% colnames(incomplete_dat))) {
       
@@ -907,7 +906,6 @@ app_server <- function( input, output, session ) {
       incomplete_dat <- NULL
       values$item_difficulty <- items
       shinyjs::reset("file_incomplete")
-      
     } else {
       shinyjs::enable("widget_next")
       values$start_time = unique(incomplete_dat$start)

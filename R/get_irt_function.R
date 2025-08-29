@@ -35,7 +35,7 @@ irt_function <- function(all_items, IRT = TRUE, exclude_previous = FALSE, previo
       #   dplyr::pull(item_number)
 
       # don't re-use previous items
-      if(isTRUE(exclude_previous)){
+      if(isTRUE(exclude_previous)|exclude_previous == "Yes"){
         # previously_completed = previous %>%
         # # selects only done items and grabs them.
         #                         dplyr::pull(item_number)

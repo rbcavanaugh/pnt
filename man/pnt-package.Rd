@@ -27,5 +27,10 @@ Authors:
   \item William D. Hula
 }
 
+Other contributors:
+\itemize{
+  \item Stacey Steel [contributor]
+}
+
 }
 \keyword{internal}
