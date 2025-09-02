@@ -104,6 +104,7 @@ app_server <- function( input, output, session ) {
   })
   
   observeEvent(input$back_to_test_or_retest,{
+    
     values$widget_counter = values$widget_counter - 1
     changeIntroPage("new_pnt_page")
   })
@@ -286,6 +287,7 @@ app_server <- function( input, output, session ) {
   # in this case, its because we want to keep changing the possible options for 
   # the tests depending on which test is selected. 
   observeEvent(input$retest,{
+
     values$new_test = ifelse(input$retest == "1", TRUE, FALSE)#!input$retest
     if(isTruthy(values$new_test)){
      
@@ -346,7 +348,7 @@ app_server <- function( input, output, session ) {
         }
     cat(paste("New test length:", values$test_length, "\n"))
     })
-
+  
   
   ##############################################################################
   ##############################################################################
@@ -703,6 +705,15 @@ app_server <- function( input, output, session ) {
       if (isTruthy(go_to_results)){
         cat("Go to results triggered \n")
         shinyjs::js$gettime() # log time for end of test. 
+        
+        ### ADDING FIX FOR SECOND TEST SELECTED WITH FILE UPLOAD
+        ### THEN USER GOES BACK AND CHOOSES FIRST TEST
+        ### NEED TO CLEAR THESE ITEMS
+        if(isTruthy(input$retest == "1")){
+          values$previous <- NULL
+          values$num_previous <- 0
+          values$min_sem <- NULL
+        }
         
         # if its the end of the test, calculate the final ability/sem values
         values$irt_final <- 
